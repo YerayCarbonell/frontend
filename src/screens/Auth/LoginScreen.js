@@ -33,6 +33,22 @@ export default function LoginScreen({ navigation }) {
   const fadeAnim = useState(new Animated.Value(0))[0];
   const slideAnim = useState(new Animated.Value(50))[0];
   
+   // Verificar si ya hay una sesión activa
+   useEffect(() => {
+    const checkSession = async () => {
+      try {
+        const token = await AsyncStorage.getItem('userToken');
+        if (token) {
+          // Si el token existe, redirige directamente a la pantalla principal
+          navigation.replace('HomeScreen');
+        }
+      } catch (error) {
+        console.error('Error al verificar sesión:', error);
+      }
+    };
+    checkSession();
+  }, []);
+
   useEffect(() => {
     Animated.parallel([
       Animated.timing(fadeAnim, {

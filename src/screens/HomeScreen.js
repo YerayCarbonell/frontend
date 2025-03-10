@@ -86,7 +86,7 @@ export default function HomeScreen({ navigation }) {
           </Text>
           <TouchableOpacity 
             style={styles.profileButton}
-            onPress={() => navigation.navigate('Profile')}
+            onPress={() => navigation.navigate('ProfileScreen')}
           >
             <Ionicons 
               name="person-circle-outline" 
