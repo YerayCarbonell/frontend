@@ -67,7 +67,7 @@ const OfertasList = () => {
 
   // Determinar si el usuario actual ya se ha postulado a una oferta
   const yaPostulado = (oferta) => {
-    if (!isAuthenticated || !currentUser || currentUser.role !== 'musico') return false;
+    if (!isAuthenticated || !currentUser || currentUser.role !== 'musician') return false;
     return oferta.postulaciones?.some(p => p.musico === currentUser._id);
   };
 
@@ -172,13 +172,13 @@ const OfertasList = () => {
                     Ver detalles
                   </Link>
                   
-                  {isAuthenticated && currentUser?.role === 'musico' && !yaPostulado(oferta) && (
+                  {isAuthenticated && currentUser?.role === 'musician' && !yaPostulado(oferta) && (
                     <Link to={`/ofertas/${oferta._id}/postular`} className="btn btn-primary">
                       Postularme
                     </Link>
                   )}
                   
-                  {isAuthenticated && currentUser?.role === 'musico' && yaPostulado(oferta) && (
+                  {isAuthenticated && currentUser?.role === 'musician' && yaPostulado(oferta) && (
                     <span className="postulado-badge">Ya postulado</span>
                   )}
                   

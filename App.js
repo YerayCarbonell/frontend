@@ -27,7 +27,7 @@ function App() {
         <Routes>
           <Route path="/" element={<LandingPage />} />
           
-          {/* Rutas públicas (accesibles sin estar autenticado) */}
+          {/* Rutas públicas */}
           <Route path="/login" element={<PublicRoute />}>
             <Route index element={<Login />} />
           </Route>
@@ -36,54 +36,31 @@ function App() {
             <Route index element={<Register />} />
           </Route>
           
-          {/* Rutas de Ofertas (accesibles para todos) */}
+          {/* Rutas de ofertas públicas */}
           <Route path="/ofertas" element={<OfertasList />} />
           <Route path="/ofertas/:id" element={<OfertaDetail />} />
 
-          {/* Rutas protegidas (requieren autenticación) */}
-          <Route path="/dashboard" element={<ProtectedRoute />}>
-            <Route index element={<Dashboard />} />
+          {/* Rutas protegidas */}
+          <Route element={<ProtectedRoute />}>
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/profile" element={<Profile />} />
           </Route>
-          
-           {/* Rutas para músicos */}
-           <Route path="/ofertas/:id/postular" element={
-            <ProtectedRoute requiredRole="musician">
-              <PostularForm />
-            </ProtectedRoute>
-          } />
-          <Route path="/mis-postulaciones" element={
-            <ProtectedRoute requiredRole="musician">
-              <MisPostulaciones />
-            </ProtectedRoute>
-          } />
 
-           {/* Rutas para organizadores */}
-           <Route path="/crear-oferta" element={
-            <ProtectedRoute requiredRole="organizador">
-              <OfertaForm />
-            </ProtectedRoute>
-          } />
-          <Route path="/ofertas/:id/editar" element={
-            <ProtectedRoute requiredRole="organizador">
-              <OfertaForm />
-            </ProtectedRoute>
-          } />
-          <Route path="/ofertas/:id/postulaciones" element={
-            <ProtectedRoute requiredRole="organizador">
-              <PostulacionesList />
-            </ProtectedRoute>
-          } />
-          <Route path="/mis-ofertas" element={
-            <ProtectedRoute requiredRole="organizador">
-              <MisOfertas />
-            </ProtectedRoute>
-          } />
-
-          <Route path="/profile" element={<ProtectedRoute />}>
-            <Route index element={<Profile />} />
+          {/* Rutas para músicos */}
+          <Route element={<ProtectedRoute requiredRole="musician" />}>
+            <Route path="/ofertas/:id/postular" element={<PostularForm />} />
+            <Route path="/mis-postulaciones" element={<MisPostulaciones />} />
           </Route>
-          
-          {/* Ruta de 404 para manejar rutas no encontradas */}
+
+          {/* Rutas para organizadores */}
+          <Route element={<ProtectedRoute requiredRole="organizer" />}>
+            <Route path="/crear-oferta" element={<OfertaForm />} />
+            <Route path="/ofertas/:id/editar" element={<OfertaForm />} />
+            <Route path="/ofertas/:id/postulaciones" element={<PostulacionesList />} />
+            <Route path="/mis-ofertas" element={<MisOfertas />} />
+          </Route>
+
+          {/* Ruta 404 */}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </AuthProvider>

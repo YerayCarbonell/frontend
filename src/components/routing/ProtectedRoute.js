@@ -3,14 +3,24 @@ import React from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
-const ProtectedRoute = () => {
-  const { isAuthenticated, loading } = useAuth();
+const ProtectedRoute = ({ requiredRole }) => {
+  const { isAuthenticated, currentUser, loading } = useAuth();
 
   if (loading) {
     return <div>Cargando...</div>;
   }
 
-  return isAuthenticated ? <Outlet /> : <Navigate to="/login" />;
+  // Redirigir si no está autenticado
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />;
+  }
+
+  // Redirigir si el rol no coincide
+  if (requiredRole && currentUser?.role !== requiredRole) {
+    return <Navigate to="/" replace />;
+  }
+
+  return <Outlet />;
 };
 
 export default ProtectedRoute;

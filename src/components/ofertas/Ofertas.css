@@ -13,127 +13,127 @@
     --transition: all 0.3s ease;
     --header-height: 80px;
     margin-top: 70px;
-
+    min-height: 100vh; /* Asegura que body ocupe al menos la altura de la ventana */
   }
   /* Estilos para el formulario de postulación */
 .postular-form-container {
-    max-width: 800px;
-    margin: 30px auto;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-  }
-  
-  .postular-form-container h1 {
-    color: #333;
-    margin-bottom: 20px;
-    font-size: 1.8rem;
-  }
-  
-  .oferta-resumen {
-    margin-bottom: 30px;
-    padding: 15px;
-    background-color: #f9f9f9;
-    border-radius: 5px;
-    border-left: 4px solid #007bff;
-  }
-  
-  .oferta-info p {
-    margin: 8px 0;
-  }
-  
-  .oferta-info strong {
-    display: inline-block;
-    width: 100px;
-    color: #555;
-  }
-  
-  .postular-form .form-group {
-    margin-bottom: 20px;
-  }
-  
-  .postular-form label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 600;
-    color: #333;
-  }
-  
-  .postular-form textarea {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    resize: vertical;
-    min-height: 150px;
-  }
-  
-  .postular-form textarea:focus {
-    border-color: #007bff;
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
-  }
-  
-  .form-actions {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 30px;
-  }
-  
-  .alert {
-    padding: 12px 20px;
-    margin-bottom: 20px;
-    border-radius: 4px;
-  }
-  
-  .alert-danger {
-    background-color: #f8d7da;
-    border: 1px solid #f5c6cb;
-    color: #721c24;
-  }
-  
-  .alert-success {
-    background-color: #d4edda;
-    border: 1px solid #c3e6cb;
-    color: #155724;
-  }
-  
-  /* Estilos para botones */
-  .btn {
-    display: inline-block;
-    padding: 10px 20px;
-    margin: 5px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    text-decoration: none;
-    font-weight: 500;
-    transition: all 0.3s ease;
-  }
-  
-  .btn-primary {
-    background-color: #007bff;
-    color: white;
-  }
-  
-  .btn-primary:hover {
-    background-color: #0069d9;
-  }
-  
-  .btn-secondary {
-    background-color: #6c757d;
-    color: white;
-  }
-  
-  .btn-secondary:hover {
-    background-color: #5a6268;
-  }
-  
-  .btn:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-  }
+  max-width: 800px;
+  margin: 30px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.postular-form-container h1 {
+  color: #333;
+  margin-bottom: 20px;
+  font-size: 1.8rem;
+}
+
+.oferta-resumen {
+  margin-bottom: 30px;
+  padding: 15px;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+  border-left: 4px solid #007bff;
+}
+
+.oferta-info p {
+  margin: 8px 0;
+}
+
+.oferta-info strong {
+  display: inline-block;
+  width: 100px;
+  color: #555;
+}
+
+.postular-form .form-group {
+  margin-bottom: 20px;
+}
+
+.postular-form label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #333;
+}
+
+.postular-form textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  resize: vertical;
+  min-height: 150px;
+}
+
+.postular-form textarea:focus {
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+}
+
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30px;
+}
+
+.alert {
+  padding: 12px 20px;
+  margin-bottom: 20px;
+  border-radius: 4px;
+}
+
+.alert-danger {
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  color: #721c24;
+}
+
+.alert-success {
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+  color: #155724;
+}
+
+/* Estilos para botones */
+.btn {
+  display: inline-block;
+  padding: 10px 20px;
+  margin: 5px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #0069d9;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background-color: #5a6268;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
   .main-content-padding {
     padding-top: 80px; 
 

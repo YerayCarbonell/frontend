@@ -24,7 +24,7 @@ const PostularForm = () => {
       return;
     }
     
-    if (currentUser?.role !== 'musico') {
+    if (currentUser?.role !== 'musician') {
       navigate('/ofertas');
       return;
     }
@@ -34,9 +34,12 @@ const PostularForm = () => {
       try {
         const res = await axios.get(`http://localhost:5000/api/ofertas/${id}`);
         setOferta(res.data);
-        
+
         // Verificar si ya se ha postulado a esta oferta
-        const yaPostulado = res.data.postulaciones?.some(p => p.musico === currentUser._id);
+        const yaPostulado = res.data.postulaciones?.some(p => 
+          p.musico?._id === currentUser._id || // Si está poblado como objeto
+          p.musico === currentUser._id         // Si es solo el ID
+        );
         if (yaPostulado) {
           setError('Ya te has postulado a esta oferta.');
           setTimeout(() => {
@@ -66,10 +69,8 @@ const PostularForm = () => {
     setError('');
     
     try {
-      await axios.post(`http://localhost:5000/api/postulaciones`, {
-        ofertaId: id,
-        motivacion: motivacion
-      });
+      await axios.post(`http://localhost:5000/api/ofertas/${id}/postular`, { motivacion: motivacion });
+
       
       setSuccess('¡Postulación enviada correctamente!');
       

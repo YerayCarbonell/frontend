@@ -57,7 +57,7 @@ body {
 /* Contenedor principal centrado */
 .container {
   width: 100%; /* Ocupa el ancho disponible */
-  max-width: 1200px; /* Limita el ancho máximo */
+  max-width: 1600px; /* Limita el ancho máximo */
   margin-left: auto; /* Centra el contenedor */
   margin-right: auto; /* Centra el contenedor */
   padding-left: 20px; /* Espacio lateral */
