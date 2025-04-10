@@ -1,0 +1,911 @@
+/* src/components/LandingPage.css */
+:root {
+  --primary-color: #4a6bff;
+  --secondary-color: #ff7e5f;
+  --accent-color: #fbaf00;
+  --text-color: #333333;
+  --light-color: #ffffff;
+  --gray-color: #f5f5f5;
+  --dark-gray: #666666;
+  --border-radius: 8px;
+  --transition: all 0.3s ease;
+  --header-height: 80px; /* Altura del header fijo */
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+}
+
+html {
+  scroll-behavior: smooth; /* Comportamiento suave para saltos de ancla */
+  /* Deja espacio arriba al saltar a un ID para no quedar oculto por el header fijo */
+  scroll-padding-top: var(--header-height);
+}
+
+body {
+  font-family: 'Poppins', 'Segoe UI', sans-serif;
+  color: var(--text-color);
+  line-height: 1.6;
+  min-height: 100vh; /* Asegura que body ocupe al menos la altura de la ventana */
+  overflow-x: hidden; /* Previene scroll horizontal */
+  display: flex; /* Permite que .landing-page crezca */
+  flex-direction: column;
+  overflow-wrap: break-word; /* Ayuda a prevenir overflow por palabras largas */
+}
+
+.landing-page {
+  flex-grow: 1; /* Hace que ocupe el espacio restante si body es flex */
+  display: flex; /* Ayuda a gestionar la estructura interna, especialmente para el footer */
+  flex-direction: column;
+  width: 100%; /* Asegura que ocupe todo el ancho */
+  position: relative; /* Contexto para posibles elementos absolutos */
+  /* overflow-x: hidden; ya está en body, quizás redundante aquí pero no daña */
+  overflow: visible;
+  height: auto;
+  min-height: 100vh;
+}
+
+/* Contenedor principal centrado */
+.container {
+  width: 100%; /* Ocupa el ancho disponible */
+  max-width: 1200px; /* Limita el ancho máximo */
+  margin-left: auto; /* Centra el contenedor */
+  margin-right: auto; /* Centra el contenedor */
+  padding-left: 20px; /* Espacio lateral */
+  padding-right: 20px; /* Espacio lateral */
+  /* height: auto; y overflow: visible; son valores por defecto */
+}
+
+main {
+  flex-grow: 1; /* Asegura que el contenido principal empuje el footer hacia abajo */
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+ul {
+  list-style: none;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block; /* Evita espacio extra debajo de las imágenes */
+}
+
+/* --- Botones --- */
+.btn {
+  display: inline-block;
+  padding: 10px 20px;
+  border-radius: var(--border-radius);
+  transition: var(--transition);
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+  border: none;
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  color: var(--light-color);
+}
+
+.btn-primary:hover {
+  background-color: #3a5ae8;
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: var(--primary-color);
+  border: 2px solid var(--primary-color);
+}
+
+.btn-secondary:hover {
+  background-color: rgba(74, 107, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+.btn-lg {
+  padding: 14px 28px;
+  font-size: 16px;
+}
+
+/* --- Título de Sección --- */
+.section-title {
+  font-size: 36px;
+  text-align: center;
+  margin-bottom: 65px; /* Ajustado para incluir espacio para el after */
+  padding-top: 80px; /* Espacio estándar superior para secciones */
+  position: relative;
+}
+
+.how-it-works, .benefits, .testimonials, .cta {
+  padding-top: 80px;
+  padding-bottom: 80px;
+}
+.cta { /* CTA puede tener padding diferente */
+  padding: 80px 0;
+}
+.section-title:after {
+  content: "";
+  position: absolute;
+  bottom: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 4px;
+  background-color: var(--primary-color);
+}
+
+/* --- Header --- */
+.header {
+  padding: 0 20px; /* Añadido padding lateral directamente al header */
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  background-color: var(--light-color);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  height: var(--header-height);
+  display: flex; /* Para alinear el container interno verticalmente si es necesario */
+  align-items: center; /* Centra verticalmente el contenido del header */
+}
+
+/* Quitamos el display flex del container del header, ya que el header es ahora flex */
+.header .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%; /* Asegura que el container use el ancho disponible dentro del header */
+}
+
+.logo h1 {
+  font-size: 24px;
+  color: var(--primary-color);
+  margin: 0; /* Reseteo por si acaso */
+}
+
+.nav ul {
+  display: flex;
+  align-items: center;
+}
+
+.nav ul li {
+  margin-left: 30px;
+}
+
+.nav ul li a {
+  font-weight: 500;
+  transition: var(--transition);
+  padding: 5px 0; /* Añade un poco de área de click */
+}
+
+.nav ul li a:hover {
+  color: var(--primary-color);
+}
+
+/* --- Hero Section --- */
+.hero {
+  /* IMPORTANTE: Este padding-top compensa el header fijo. */
+  padding-top: calc(var(--header-height) + 60px); /* 60px de espacio extra sobre el header */
+  padding-bottom: 80px;
+  background-color: var(--gray-color);
+  display: flex; /* Para centrar verticalmente el container si es necesario */
+  align-items: center;
+}
+
+.hero .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  flex-wrap: wrap; /* Permite que los elementos pasen abajo en pantallas pequeñas */
+}
+
+.hero-content {
+  flex: 1;
+  min-width: 300px; /* Evita que se comprima demasiado */
+}
+
+.hero-content h1 {
+  font-size: 48px;
+  line-height: 1.2;
+  margin-bottom: 20px;
+  color: var(--text-color);
+}
+
+.hero-content p {
+  font-size: 18px;
+  margin-bottom: 30px;
+  color: var(--dark-gray);
+  max-width: 600px; /* Limita ancho del párrafo */
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap; /* Para pantallas pequeñas */
+}
+
+
+.hero-image {
+  flex: 1;
+  min-width: 300px; /* Evita que se comprima demasiado */
+  text-align: center; /* Centra la imagen si el contenedor es más grande */
+}
+
+.hero-image img {
+  /* Forma y presentación mejorada */
+  border-radius: 16px;
+  box-shadow: 0 18px 35px rgba(0, 0, 0, 0.12), 0 8px 20px rgba(0, 0, 0, 0.06);
+  
+  /* Transición suave y elegante */
+  transition: all 0.6s cubic-bezier(0.2, 0.85, 0.4, 1);
+  
+  /* Ajustes sutiles de imagen */
+  filter: brightness(1.04) contrast(1.08) saturate(1.05);
+  
+  /* Mantiene proporciones correctas */
+  object-fit: cover;
+  
+  /* Mejor rendimiento */
+  will-change: transform, filter, box-shadow;
+  
+  /* Borde sutil para definir los bordes */
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.hero-image img:hover {
+  /* Efecto de elevación más natural y menos exagerado */
+  
+  /* Mejora sutil de la imagen al pasar el ratón */
+  filter: brightness(1.08) contrast(1.12) saturate(1.1);
+  
+  /* Sombra más profunda pero realista */
+  box-shadow: 0 22px 45px rgba(0, 0, 0, 0.15), 0 12px 25px rgba(0, 0, 0, 0.08);
+  
+  /* Resplandor sutil sin outline que parezca botón */
+  box-shadow: 0 22px 45px rgba(0, 0, 0, 0.15), 0 12px 25px rgba(0, 0, 0, 0.08),
+              0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+
+/* --- How it Works Section --- */
+.how-it-works {
+  padding: 100px 0; /* Padding vertical estándar */
+  background-color: var(--light-color);
+  /* Si esta sección puede ser la primera bajo el header (ej. via link #how-it-works),
+     necesitaría padding-top: var(--header-height); adicional.
+     O mejor, añadirlo al .section-title o a un wrapper de sección general */
+}
+
+.tabs {
+  max-width: 800px;
+  margin: 0 auto 40px; /* Centrado y con margen inferior */
+}
+
+.tab-buttons {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+  gap: 10px; /* Espacio entre botones si van a nueva línea */
+}
+
+.tab-buttons button {
+  padding: 12px 25px;
+  background-color: transparent;
+  border: none;
+  border-bottom: 3px solid #e0e0e0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--dark-gray);
+  cursor: pointer;
+  transition: var(--transition);
+  white-space: nowrap; /* Evita que el texto del botón se parta */
+}
+
+.tab-buttons button.active {
+  color: var(--primary-color);
+  border-bottom-color: var(--primary-color);
+}
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+}
+
+.step {
+  text-align: center;
+  padding: 30px;
+  border-radius: var(--border-radius);
+  background-color: var(--light-color); /* Asegura fondo blanco si la sección cambia */
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+  transition: var(--transition);
+}
+
+.step:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.step-number {
+  width: 50px;
+  height: 50px;
+  background-color: var(--primary-color);
+  color: var(--light-color);
+  border-radius: 50%;
+  display: flex; /* Cambiado a flex para centrar fácilmente */
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0 auto 20px;
+}
+
+.step h3 {
+  margin-bottom: 15px;
+  font-size: 20px;
+  color: var(--text-color); /* Asegura color texto */
+}
+
+.step p {
+  color: var(--dark-gray);
+}
+
+/* --- Benefits Section --- */
+.benefits {
+  padding: 100px 0;
+  background-color: var(--gray-color);
+}
+
+.benefits-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+}
+
+.benefit-card {
+  background-color: var(--light-color);
+  padding: 40px 30px;
+  border-radius: var(--border-radius);
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+  text-align: center;
+  transition: var(--transition);
+  display: flex; /* Usar flex para mejor alineación interna */
+  flex-direction: column;
+  align-items: center;
+}
+
+.benefit-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.benefit-icon {
+  width: 70px;
+  height: 70px;
+  flex-shrink: 0; /* Evita que el icono se encoja */
+  background-color: rgba(74, 107, 255, 0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 25px; /* Ajustado */
+}
+
+.benefit-icon i { /* Asumiendo que usas FontAwesome o similar */
+  font-size: 28px; /* Ligeramente más grande */
+  color: var(--primary-color);
+}
+
+.benefit-card h3 {
+  margin-bottom: 15px;
+  font-size: 20px;
+  color: var(--text-color);
+}
+
+.benefit-card p {
+  color: var(--dark-gray);
+  flex-grow: 1; /* Permite que el texto ocupe espacio si las cards tienen alturas distintas */
+}
+
+/* --- Testimonials Section --- */
+.testimonials {
+  padding: 100px 0;
+  background-color: var(--light-color);
+}
+
+.testimonial-cards {
+  display: grid;
+  /* Usar minmax es bueno, pero ajusta el mínimo si es necesario */
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 30px;
+  /* max-width: 1100px; Lo controla el .container general */
+  /* margin: 0 auto; Lo controla el .container general */
+}
+
+.testimonial-card {
+  display: flex;
+  /* align-items: center; Cambiado a flex-start para alinear arriba */
+  align-items: flex-start;
+  padding: 30px;
+  border-radius: var(--border-radius);
+  background-color: var(--gray-color); /* Ligeramente diferente para destacar */
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  gap: 20px;
+}
+
+.testimonial-image {
+  width: 80px; /* Ligeramente más pequeño */
+  height: 80px;
+  flex-shrink: 0;
+}
+
+.testimonial-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 3px solid var(--light-color); /* Borde opcional */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Sombra sutil */
+}
+
+.testimonial-text {
+ flex: 1; /* Ocupa el espacio restante */
+}
+
+.testimonial-text p {
+  font-style: italic;
+  margin-bottom: 15px;
+  color: var(--dark-gray); /* Ajusta color si es necesario */
+  position: relative; /* Para comillas opcionales */
+  padding-left: 15px; /* Espacio para comilla */
+}
+/* Opcional: Añadir comillas */
+.testimonial-text p::before {
+  content: '“';
+  position: absolute;
+  left: -5px;
+  top: -10px;
+  font-size: 30px;
+  color: var(--primary-color);
+  opacity: 0.3;
+}
+
+
+.testimonial-text h4 {
+  font-size: 18px;
+  margin-bottom: 5px;
+  color: var(--text-color);
+}
+
+.testimonial-role {
+  color: var(--primary-color); /* Rol más destacado */
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* --- CTA Section --- */
+.cta {
+  padding: 80px 0;
+  background-color: var(--primary-color);
+  color: var(--light-color);
+  text-align: center;
+}
+
+/* No necesita .container si quieres que el fondo ocupe todo el ancho */
+.cta .container {
+  /* El container interno centrará el contenido */
+}
+
+.cta h2 {
+  font-size: 36px;
+  margin-bottom: 20px;
+  font-weight: 700; /* Más peso */
+}
+
+.cta p {
+  font-size: 18px;
+  margin-bottom: 40px; /* Más espacio antes de botones */
+  max-width: 650px; /* Ligeramente más ancho */
+  margin-left: auto;
+  margin-right: auto;
+  opacity: 0.9; /* Un poco transparente */
+}
+
+.cta-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px; /* Más espacio */
+  flex-wrap: wrap;
+}
+
+/* Estilos específicos para botones en CTA */
+.cta .btn-primary { /* Este es el botón "blanco" */
+  background-color: var(--light-color);
+  color: var(--primary-color);
+}
+
+.cta .btn-primary:hover {
+  background-color: #f0f0f0;
+  transform: translateY(-2px); /* Añadir efecto hover */
+}
+
+.cta .btn-secondary { /* Este es el botón "transparente" con borde blanco */
+  border-color: var(--light-color);
+  color: var(--light-color);
+}
+
+.cta .btn-secondary:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px); /* Añadir efecto hover */
+}
+
+/* --- Footer --- */
+.footer {
+  background-color: #1a1a1a;
+  color: #d3d3d3; /* Ligeramente más claro que el original */
+  padding: 70px 0 30px; /* Ajustado padding inferior */
+  /* margin-top: auto;  Si .landing-page es flex, esto ayuda a empujar el footer abajo */
+}
+
+.footer .container {
+ /* El container centra el contenido del footer */
+}
+
+.footer-content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 40px; /* Espacio entre columnas y logo/links */
+  margin-bottom: 50px; /* Más espacio antes del bottom */
+}
+
+.footer-logo {
+  flex-basis: 100%; /* Ocupa toda la primera línea en pantallas pequeñas */
+  margin-bottom: 30px; /* Espacio si pasa a una línea */
+  max-width: 300px; /* Limita ancho del logo/descripción */
+}
+
+@media (min-width: 768px) {
+  .footer-logo {
+    flex-basis: auto; /* Vuelve a tamaño normal en pantallas grandes */
+    margin-bottom: 0;
+  }
+}
+
+.footer-logo h2 {
+  font-size: 24px;
+  margin-bottom: 15px;
+  color: var(--light-color); /* Asegura color blanco */
+}
+
+.footer-logo p {
+  color: #b3b3b3;
+  font-size: 15px; /* Un poco más grande */
+}
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 50px; /* Espacio entre columnas de links */
+  flex-grow: 1; /* Permite que ocupe espacio */
+  justify-content: flex-end; /* Alinea las columnas a la derecha */
+}
+
+.footer-column {
+  min-width: 150px; /* Ancho mínimo para cada columna */
+}
+
+.footer-column h3 {
+  font-size: 18px;
+  color: var(--light-color); /* Blanco para títulos */
+  margin-bottom: 25px; /* Más espacio */
+  position: relative;
+}
+
+.footer-column h3::after { /* Corregido :after a ::after */
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  width: 40px;
+  height: 3px;
+  background-color: var(--primary-color);
+}
+
+.footer-column ul li {
+  margin-bottom: 12px; /* Un poco más de espacio */
+}
+
+.footer-column ul li a {
+  color: #b3b3b3;
+  transition: var(--transition);
+}
+
+.footer-column ul li a:hover {
+  color: var(--primary-color);
+  padding-left: 5px; /* Efecto sutil al pasar el ratón */
+}
+
+.social-icons {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px; /* Espacio si están en la columna del logo */
+}
+
+.social-icons a {
+  width: 40px; /* Ligeramente más grandes */
+  height: 40px;
+  border-radius: 50%;
+  background-color: #333;
+  color: var(--light-color); /* Añade color para el icono */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+  font-size: 18px; /* Tamaño del icono si usas fuente */
+}
+
+.social-icons a:hover {
+  background-color: var(--primary-color);
+  transform: scale(1.1); /* Efecto zoom */
+}
+
+.footer-bottom {
+  text-align: center;
+  padding-top: 30px; /* Más espacio */
+  border-top: 1px solid #444; /* Borde un poco más visible */
+  margin-top: 30px; /* Separación del contenido superior */
+}
+
+.footer-bottom p {
+  color: #999; /* Gris más claro */
+  font-size: 14px;
+}
+
+/* --- Responsive --- */
+
+/* Pantallas Grandes (Ajuste fino opcional) */
+@media (min-width: 1600px) {
+  .container {
+    max-width: 1400px;
+  }
+
+  .hero-content h1 {
+    font-size: 56px;
+  }
+
+  .hero-content p {
+    font-size: 20px;
+  }
+
+  .section-title {
+    font-size: 42px;
+  }
+
+  .step, .benefit-card {
+    padding: 40px;
+  }
+}
+
+/* Tablets y Laptops Pequeñas */
+@media (max-width: 991px) {
+  .hero .container {
+    flex-direction: column; /* Apila contenido e imagen */
+    text-align: center; /* Centra el texto */
+    gap: 50px; /* Más espacio vertical */
+  }
+
+  .hero-content {
+    margin-bottom: 0; /* Quita margen extra, el gap ya lo da */
+    max-width: 100%; /* Permite que ocupe todo el ancho */
+  }
+
+  .hero-content p {
+    margin-left: auto; /* Centra el párrafo si tiene max-width */
+    margin-right: auto;
+  }
+
+  .hero-buttons {
+    justify-content: center; /* Centra los botones */
+  }
+
+  .testimonial-cards {
+     /* Ya usa auto-fit, pero puedes forzar 1 columna si prefieres */
+     /* grid-template-columns: 1fr; */
+  }
+
+  .footer-content {
+    /* Podría necesitar flex-direction: column; si no se ve bien */
+    /* flex-direction: column; */
+    align-items: center; /* Centra los bloques del footer */
+    text-align: center;
+  }
+
+  .footer-logo {
+     max-width: 100%; /* Permite que ocupe más ancho */
+  }
+
+  .footer-links {
+    justify-content: center; /* Centra las columnas de links */
+    margin-top: 40px;
+    width: 100%; /* Asegura que ocupe todo el ancho */
+    gap: 40px; /* Ajusta gap */
+  }
+
+  .footer-column {
+     min-width: 180px; /* Ajusta si es necesario */
+     text-align: center; /* Centra texto de columnas */
+  }
+
+  .footer-column h3::after {
+     left: 50%; /* Centra la línea */
+     transform: translateX(-50%);
+  }
+
+  .social-icons {
+    justify-content: center; /* Centra iconos */
+  }
+}
+
+/* Tablets Verticales y Móviles Grandes */
+@media (max-width: 768px) {
+  :root {
+    --header-height: 70px; /* Header un poco más bajo en móviles */
+  }
+
+  .header {
+     padding: 0 15px; /* Menos padding lateral */
+     /* Puede que necesites un menú hamburguesa aquí */
+  }
+
+  .header .container {
+     /* Si no usas menú hamburguesa, los links se pueden apilar */
+     /* flex-direction: column; */
+     /* gap: 15px; */
+  }
+
+  .nav ul {
+    /* Ocultar para menú hamburguesa, o ajustar espaciado */
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px 15px; /* Espacio vertical y horizontal */
+  }
+
+  .nav ul li {
+    margin-left: 0; /* Quita margen izquierdo si usan gap */
+  }
+
+  .hero {
+    padding-top: calc(var(--header-height) + 40px); /* Menos espacio extra */
+    padding-bottom: 60px;
+  }
+
+  .hero-content h1 {
+    font-size: 36px;
+  }
+
+  .hero-content p {
+     font-size: 17px; /* Ajusta tamaño fuente */
+  }
+
+  .section-title {
+    font-size: 32px;
+    margin-bottom: 55px; /* Ajusta margen */
+    padding-top: 60px; /* Menos padding superior */
+  }
+
+  .steps {
+    /* auto-fit ya debería hacer que sea 1 columna, pero puedes forzarlo */
+    /* grid-template-columns: 1fr; */
+  }
+
+  .benefits-container {
+    /* grid-template-columns: 1fr; */
+  }
+
+  .testimonial-card {
+    flex-direction: column; /* Apila imagen y texto */
+    align-items: center; /* Centra elementos */
+    text-align: center;
+  }
+
+  .testimonial-text p::before {
+     /* Reposiciona la comilla si es necesario */
+     left: 50%;
+     transform: translateX(-50%);
+     top: -15px;
+  }
+
+  .testimonial-text p {
+     padding-left: 0; /* Quita padding si la comilla se reposiciona */
+  }
+
+
+  .cta h2 {
+     font-size: 30px;
+  }
+  .cta p {
+     font-size: 16px;
+  }
+
+  .cta-buttons {
+     flex-direction: column; /* Apila botones */
+     align-items: center; /* Centra botones */
+     gap: 15px;
+  }
+
+  .cta .btn {
+     width: 80%; /* Hace los botones más anchos */
+     max-width: 300px;
+  }
+
+  .footer-links {
+     flex-direction: column; /* Apila columnas de links */
+     align-items: center; /* Centra las columnas */
+     gap: 40px;
+  }
+
+}
+
+/* Móviles Pequeños */
+@media (max-width: 576px) {
+  :root {
+     --header-height: 60px; /* Header aún más bajo */
+  }
+  body {
+    line-height: 1.5; /* Ligeramente menos línea */
+  }
+  .container {
+    padding-left: 15px; /* Menos padding lateral */
+    padding-right: 15px;
+  }
+
+  .section-title {
+    font-size: 28px;
+  }
+
+  .hero {
+    padding-top: calc(var(--header-height) + 30px);
+  }
+
+  .hero-content h1 {
+    font-size: 28px;
+    line-height: 1.3; /* Ajusta línea */
+  }
+
+  .hero-content p {
+    font-size: 16px;
+  }
+
+  .btn-lg {
+    padding: 12px 24px;
+    font-size: 15px; /* Ajusta fuente */
+  }
+
+  .tab-buttons button {
+     font-size: 15px; /* Ajusta fuente */
+     padding: 10px 15px; /* Menos padding */
+  }
+
+  .step, .benefit-card {
+    padding: 25px; /* Menos padding interno */
+  }
+}
