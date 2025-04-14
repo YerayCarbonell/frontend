@@ -5,6 +5,7 @@ import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
 import './Ofertas.css';
 import Navbar from '../layout/Navbar';
+import '../../components/common/variables.css';
 
 const PostularForm = () => {
   const { id } = useParams(); // ID de la oferta
@@ -36,10 +37,14 @@ const PostularForm = () => {
         setOferta(res.data);
 
         // Verificar si ya se ha postulado a esta oferta
-        const yaPostulado = res.data.postulaciones?.some(p => 
-          p.musico?._id === currentUser._id || // Si está poblado como objeto
-          p.musico === currentUser._id         // Si es solo el ID
-        );
+        const postulaciones = res.data.postulaciones || [];
+        const yaPostulado = postulaciones.some(p => {
+          if (typeof p === 'object') {
+            return p.musician === currentUser._id || p.musician?._id === currentUser._id;
+          }
+          return p === currentUser._id;
+        });
+        
         if (yaPostulado) {
           setError('Ya te has postulado a esta oferta.');
           setTimeout(() => {
@@ -70,7 +75,6 @@ const PostularForm = () => {
     
     try {
       await axios.post(`http://localhost:5000/api/ofertas/${id}/postular`, { motivacion: motivacion });
-
       
       setSuccess('¡Postulación enviada correctamente!');
       
@@ -100,16 +104,27 @@ const PostularForm = () => {
   };
 
   if (loading) {
-    return <div className="loading">Cargando detalles de la oferta...</div>;
+    return (
+      <div>
+        <Navbar />
+        <div className="loading">Cargando detalles de la oferta...</div>
+      </div>
+    );
   }
 
   if (!oferta && !error) {
-    return <div className="loading">La oferta no existe o ha sido eliminada.</div>;
+    return (
+      <div>
+        <Navbar />
+        <div className="loading">La oferta no existe o ha sido eliminada.</div>
+      </div>
+    );
   }
 
   return (
-    <div>
+    <div className="full-window">
       <Navbar />
+      <div className="postular-form-wrapper">
       <div className="postular-form-container">
         <h1>Postularse a: {oferta?.titulo}</h1>
         
@@ -119,8 +134,8 @@ const PostularForm = () => {
         {!error && !success && (
           <div className="oferta-resumen">
             <div className="oferta-info">
-              <p><strong>Organizador:</strong> {oferta?.organizador?.name || 'No especificado'}</p>
-              <p><strong>Local:</strong> {oferta?.organizador?.profile?.local || 'No especificado'}</p>
+              <p><strong>Organizador:</strong> {oferta?.organizer?.name || 'No especificado'}</p>
+              <p><strong>Local:</strong> {oferta?.organizer?.profile?.local || 'No especificado'}</p>
               <p><strong>Fecha:</strong> {formatearFecha(oferta?.fechaEvento)}</p>
               <p><strong>Género:</strong> {oferta?.genero || 'No especificado'}</p>
               <p><strong>Ubicación:</strong> {oferta?.ubicacion || 'No especificada'}</p>
@@ -163,6 +178,7 @@ const PostularForm = () => {
           </form>
         )}
       </div>
+    </div>
     </div>
   );
 };

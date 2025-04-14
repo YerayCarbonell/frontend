@@ -18,28 +18,31 @@ html, body, #root {
   padding: 0;
 }
 
+/* src/components/auth/Auth.css */
+
 .auth-container {
   min-height: 100vh;
-  width: 100%;
+  width: 100vw; /* 🔥 para que ocupe el ancho total sin dejar márgenes */
   display: flex;
-  align-items: center;
   justify-content: center;
-  background-color: var(--gray-color);
-  padding: 40px 20px;
+  align-items: center;
+  background-color: var(--gray-color); /* o el mismo fondo que uses en el .hero */
+  padding: 40px 20px; /* espacio interno adaptable */
   box-sizing: border-box;
-  overflow-y: auto;
+  position: relative;
+  z-index: 1;
 }
 
 .auth-card {
-  background-color: var(--light-color);
-  border-radius: var(--border-radius);
-  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
-  padding: 40px;
   width: 100%;
-  max-width: 500px;
+  max-width: 420px;
+  background-color: var(--light-color); /* blanco */
+  padding: 40px 30px;
+  border-radius: 10px;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.1);
   text-align: center;
-  margin: auto;
 }
+
 
 .register-card {
   max-width: 600px;
@@ -221,6 +224,31 @@ html, body, #root {
 
 .form-buttons button {
   flex: 1;
+}
+
+.toggle-password-btn {
+  background-color: #007BFF; /* Blue background */
+  color: white; /* White text */
+  border: none; /* No border */
+  border-radius: 5px; /* Rounded corners */
+  padding: 5px 10px; /* Padding */
+  cursor: pointer; /* Pointer cursor */
+  font-size: 14px; /* Font size */
+}
+
+.toggle-password-btn:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
+
+.toggle-password-btn:focus {
+  outline: none; /* Remove focus outline */
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Add focus shadow */
+}
+
+.auth-logo .highlight {
+  color: #444444; /* Azul claro */
+  background: none;
+  -webkit-text-fill-color: initial;
 }
 
 /* Asegurarse de que el contenido se ve bien en pantallas muy grandes */

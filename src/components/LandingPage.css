@@ -62,6 +62,7 @@ body {
   margin-right: auto; /* Centra el contenedor */
   padding-left: 20px; /* Espacio lateral */
   padding-right: 20px; /* Espacio lateral */
+  
   /* height: auto; y overflow: visible; son valores por defecto */
 }
 
@@ -200,13 +201,28 @@ img {
 
 /* --- Hero Section --- */
 .hero {
-  /* IMPORTANTE: Este padding-top compensa el header fijo. */
-  padding-top: calc(var(--header-height) + 60px); /* 60px de espacio extra sobre el header */
-  padding-bottom: 80px;
   background-color: var(--gray-color);
-  display: flex; /* Para centrar verticalmente el container si es necesario */
+  width: 100%;
+  min-height: calc(100vh - var(--header-height));
+  display: flex;
+  justify-content: center;
   align-items: center;
+  position: relative;
+  z-index: 1;
 }
+
+/* Este es el truco para que el fondo gris se expanda a todo el ancho sin que la .container lo limite visualmente */
+.hero::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100%;
+  background-color: var(--gray-color);
+  z-index: -1;
+}
+
 
 .hero .container {
   display: flex;
@@ -391,6 +407,13 @@ img {
   flex-direction: column;
   align-items: center;
 }
+.benefit-image img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+}
 
 .benefit-card:hover {
   transform: translateY(-5px);
@@ -509,10 +532,7 @@ img {
   text-align: center;
 }
 
-/* No necesita .container si quieres que el fondo ocupe todo el ancho */
-.cta .container {
-  /* El container interno centrará el contenido */
-}
+
 
 .cta h2 {
   font-size: 36px;
@@ -706,7 +726,7 @@ img {
 }
 
 /* Tablets y Laptops Pequeñas */
-@media (max-width: 991px) {
+@media (max-width: 900px) {
   .hero .container {
     flex-direction: column; /* Apila contenido e imagen */
     text-align: center; /* Centra el texto */

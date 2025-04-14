@@ -19,6 +19,10 @@ import PostularForm from './src/components/ofertas/PostularForm';
 import PostulacionesList from './src/components/ofertas/PostulacionesList';
 import MisOfertas from './src/components/ofertas/MisOfertas';
 import MisPostulaciones from './src/components/ofertas/MisPostulaciones';
+import Mensajes from './src/components/mensajes/Mensajes';
+import ListaMensajes from './src/components/mensajes/ListaMensajes';
+
+import HistorialEventos from './src/components/historial/HistorialEventos';
 
 function App() {
   return (
@@ -44,6 +48,10 @@ function App() {
           <Route element={<ProtectedRoute />}>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/perfil/:id" element={<Profile />} />
+            <Route path="/mensajes" element={<ListaMensajes />} />
+            <Route path="/mensajes/:userId" element={<Mensajes />} />
+            <Route path="/historial" element={<HistorialEventos />} />
           </Route>
 
           {/* Rutas para músicos */}

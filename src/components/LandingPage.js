@@ -6,6 +6,10 @@ import Navbar from './layout/Navbar'; // Importamos el componente Navbar
 import heroImage from '../assets/images/hero-image.jpg';
 import musician from '../assets/images/musician1.jpg';
 import organizer from '../assets/images/organizer1.jpg';
+import benefitSearch from '../assets/images/benefit-search.jpg';
+import benefitTrust from '../assets/images/benefit-trust.jpg';
+import benefitChat from '../assets/images/benefit-chat.jpg';
+import benefitFree from '../assets/images/benefit-free.jpg';
 import { useAuth } from '../context/AuthContext'; // Usamos el mismo hook que usa Navbar
 
 const LandingPage = () => {
@@ -196,32 +200,32 @@ const LandingPage = () => {
 
           <div className="benefits-container">
             <div className="benefit-card">
-              <div className="benefit-icon">
-                <i className="fas fa-search"></i>
+            <div className="benefit-image">
+            <img src={benefitSearch.uri} alt="Búsqueda Simplificada" />
               </div>
               <h3>Búsqueda Simplificada</h3>
               <p>Encuentra el talento musical o la oportunidad perfecta en minutos, no en días.</p>
             </div>
 
             <div className="benefit-card">
-              <div className="benefit-icon">
-                <i className="fas fa-shield-alt"></i>
+            <div className="benefit-image">
+            <img src={benefitTrust.uri} alt="Confianza" />
               </div>
               <h3>Confianza</h3>
               <p>Sistema de valoraciones y perfiles verificados que garantizan profesionalidad.</p>
             </div>
 
             <div className="benefit-card">
-              <div className="benefit-icon">
-                <i className="fas fa-comments"></i>
+            <div className="benefit-image">
+            <img src={benefitChat.uri} alt="Comunicación Directa" />
               </div>
               <h3>Comunicación Directa</h3>
               <p>Mensaje directo entre músicos y organizadores sin intermediarios.</p>
             </div>
 
             <div className="benefit-card">
-              <div className="benefit-icon">
-                <i className="fas fa-percentage"></i>
+            <div className="benefit-image">
+            <img src={benefitFree.uri} alt="Sin Comisiones" />
               </div>
               <h3>Sin Comisiones</h3>
               <p>Plataforma sin comisiones por contratación, solo conectamos talento con oportunidades.</p>
@@ -241,7 +245,7 @@ const LandingPage = () => {
                 <img src={musicianImageUrl} alt="Músico" />
               </div>
               <div className="testimonial-text">
-                <p>"Gracias a MúsicaConnect he conseguido actuaciones regulares en varios restaurantes de mi ciudad. Ha cambiado completamente mi carrera musical."</p>
+                <p>"Gracias a EscenArte he conseguido actuaciones regulares en varios restaurantes de mi ciudad. Ha cambiado completamente mi carrera musical."</p>
                 <h4>Carlos Martínez</h4>
                 <p className="testimonial-role">Guitarrista & Cantante</p>
               </div>
@@ -302,7 +306,7 @@ const LandingPage = () => {
         <div className="container">
           <div className="footer-content">
             <div className="footer-logo">
-              <h2>MúsicaConnect</h2>
+              <h2>EscenArte</h2>
               <p>Conectando música y oportunidades</p>
               <div className="social-icons">
                 <a href="#"><i className="fab fa-facebook"></i></a>
@@ -348,7 +352,7 @@ const LandingPage = () => {
           </div>
 
           <div className="footer-bottom">
-            <p>&copy; {new Date().getFullYear()} MúsicaConnect. Todos los derechos reservados.</p>
+            <p>&copy; {new Date().getFullYear()} EscenArte. Todos los derechos reservados.</p>
           </div>
         </div>
       </footer>

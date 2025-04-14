@@ -12,8 +12,10 @@ const OfertasList = () => {
   const [error, setError] = useState('');
   const [filtros, setFiltros] = useState({
     genero: '',
-    ubicacion: ''
+    ubicacion: '',
+    orden: ''
   });
+  
   const { currentUser, isAuthenticated } = useAuth();
   
   // Función para cargar las ofertas
@@ -23,10 +25,26 @@ const OfertasList = () => {
       const queryParams = new URLSearchParams();
       if (params.genero) queryParams.append('genero', params.genero);
       if (params.ubicacion) queryParams.append('ubicacion', params.ubicacion);
+      if (params.orden) queryParams.append('orden', params.orden);
+
       
       const res = await axios.get(`http://localhost:5000/api/ofertas?${queryParams.toString()}`);
-      setOfertas(res.data);
+      let ofertasOrdenadas = res.data;
+      
+      switch (params.orden) {
+        case 'fechaAsc':
+          ofertasOrdenadas.sort((a, b) => new Date(a.fechaEvento) - new Date(b.fechaEvento));
+          break;
+        case 'fechaDesc':
+          ofertasOrdenadas.sort((a, b) => new Date(b.fechaEvento) - new Date(a.fechaEvento));
+          break;
+        default:
+          break;
+      }
+      
+      setOfertas(ofertasOrdenadas);
       setError('');
+      
     } catch (err) {
       setError('Error al cargar las ofertas. Por favor, inténtalo de nuevo más tarde.');
       console.error(err);
@@ -68,12 +86,21 @@ const OfertasList = () => {
   // Determinar si el usuario actual ya se ha postulado a una oferta
   const yaPostulado = (oferta) => {
     if (!isAuthenticated || !currentUser || currentUser.role !== 'musician') return false;
-    return oferta.postulaciones?.some(p => p.musico === currentUser._id);
+    // Verificamos si postulaciones existe y es un array
+    if (!oferta.postulaciones || !Array.isArray(oferta.postulaciones)) return false;
+    return oferta.postulaciones.some(p => {
+      if (typeof p === 'object') {
+        return p.musician === currentUser._id;
+      }
+      // Si p es solo un ID (string)
+      return p === currentUser._id;
+    });
   };
 
   return (
-    <div>
+    <div className="full-window">
       <Navbar />
+      <div className="main-content-padding">
       <div className="ofertas-container">
         <div className="ofertas-header">
           <h1>Ofertas para Músicos</h1>
@@ -87,6 +114,21 @@ const OfertasList = () => {
         {/* Filtros */}
         <div className="filtros-container">
           <form onSubmit={aplicarFiltros} className="filtros-form">
+          <div className="filtro-group">
+            <label htmlFor="orden">Ordenar por:</label>
+            <select
+              id="orden"
+              name="orden"
+              value={filtros.orden}
+              onChange={handleFiltroChange}
+            >
+              <option value="">Por defecto</option>
+              <option value="fechaAsc">Fecha ascendente</option>
+              <option value="fechaDesc">Fecha descendente</option>
+
+            </select>
+          </div>
+
             <div className="filtro-group">
               <label htmlFor="genero">Género musical:</label>
               <select
@@ -147,10 +189,10 @@ const OfertasList = () => {
               <div key={oferta._id} className="oferta-card">
                 <h3 className="oferta-titulo">{oferta.titulo}</h3>
                 <p className="oferta-organizador">
-                  <span className="label">Organizador:</span> {oferta.organizador?.name || 'Anónimo'}
+                  <span className="label">Organizador:</span> {oferta.organizer?.name || 'Anónimo'}
                 </p>
                 <p className="oferta-local">
-                  <span className="label">Local:</span> {oferta.organizador?.profile?.local || 'No especificado'}
+                  <span className="label">Local:</span> {oferta.organizer?.profile?.venueName || 'No especificado'}
                 </p>
                 <p className="oferta-fecha">
                   <span className="label">Fecha del evento:</span> {oferta.fechaEvento ? formatearFecha(oferta.fechaEvento) : 'Por determinar'}
@@ -162,7 +204,7 @@ const OfertasList = () => {
                   <span className="label">Ubicación:</span> {oferta.ubicacion || 'No especificada'}
                 </p>
                 <div className="oferta-descripcion">
-                  <p>{oferta.descripcion.length > 100 
+                  <p>{oferta.descripcion?.length > 100 
                     ? `${oferta.descripcion.substring(0, 100)}...` 
                     : oferta.descripcion}
                   </p>
@@ -199,6 +241,8 @@ const OfertasList = () => {
         )}
       </div>
     </div>
+    </div>
   );
 };
+
 export default OfertasList;

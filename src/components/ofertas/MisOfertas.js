@@ -1,32 +1,45 @@
-// src/pages/MisOfertas.js
+// src/components/ofertas/MisOfertas.js
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
+import Navbar from '../layout/Navbar';
+import './Ofertas.css';
 
 const MisOfertas = () => {
   const [ofertas, setOfertas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const { currentUser } = useAuth();
+  const { currentUser, isAuthenticated } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
+    // Verificar autenticación
+    if (!isAuthenticated || !currentUser) {
+      navigate('/login');
+      return;
+    }
+    
+    // Verificar que el usuario sea organizador
+    if (currentUser.role !== 'organizer') {
+      navigate('/');
+      return;
+    }
+    
     const fetchMisOfertas = async () => {
-      setLoading(true);
       try {
-        const res = await axios.get(`http://localhost:5000/api/ofertas/usuario/${currentUser._id}`);
+        const res = await axios.get(`http://localhost:5000/api/ofertas?organizer=${currentUser._id}`);
         setOfertas(res.data);
-        setError('');
       } catch (err) {
         console.error(err);
-        setError('Error al cargar tus ofertas. Por favor, inténtalo de nuevo más tarde.');
+        setError("No se pudieron cargar tus ofertas.");
       } finally {
         setLoading(false);
       }
     };
-
+    
     fetchMisOfertas();
-  }, [currentUser._id]);
+  }, [currentUser, isAuthenticated, navigate]);
 
   // Formatear la fecha para mostrarla
   const formatearFecha = (fechaStr) => {
@@ -40,59 +53,72 @@ const MisOfertas = () => {
   };
 
   if (loading) {
-    return <div className="loading">Cargando tus ofertas...</div>;
+    return (
+      <div className="full-window">
+        <Navbar />
+        <div className="main-content-padding">
+          <div className="loading">Cargando tus ofertas...</div>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div className="mis-ofertas-container">
-      <div className="mis-ofertas-header">
-        <h1>Mis Ofertas Publicadas</h1>
-        <Link to="/crear-oferta" className="btn btn-primary">
-          Publicar nueva oferta
-        </Link>
-      </div>
+    <div className="full-window">
+      <Navbar />
+      <div className="main-content-padding">
+        <div className="ofertas-container">
+          <div className="mis-ofertas-header">
+            <h1>Mis Ofertas Publicadas</h1>
+            <Link to="/crear-oferta" className="btn btn-primary">
+              Publicar nueva oferta
+            </Link>
+          </div>
 
-      {error && <div className="alert alert-danger">{error}</div>}
+          {error && <div className="alert alert-danger">{error}</div>}
 
-      {ofertas.length === 0 ? (
-        <div className="no-ofertas">
-          <p>Aún no has publicado ninguna oferta.</p>
-          <Link to="/crear-oferta" className="btn btn-primary">
-            Publicar mi primera oferta
-          </Link>
-        </div>
-      ) : (
-        <div className="ofertas-list">
-          {ofertas.map(oferta => (
-            <div key={oferta._id} className="oferta-card">
-              <h3 className="oferta-titulo">{oferta.titulo}</h3>
-              <p className="oferta-fecha">
-                <span className="label">Fecha del evento:</span> {formatearFecha(oferta.fechaEvento)}
-              </p>
-              <p className="oferta-genero">
-                <span className="label">Género musical:</span> {oferta.genero || 'No especificado'}
-              </p>
-              <p className="oferta-ubicacion">
-                <span className="label">Ubicación:</span> {oferta.ubicacion || 'No especificada'}
-              </p>
-              <p className="oferta-postulaciones">
-                <span className="label">Postulaciones:</span> {oferta.postulaciones?.length || 0}
-              </p>
-              <div className="oferta-actions">
-                <Link to={`/ofertas/${oferta._id}`} className="btn btn-secondary">
-                  Ver detalles
-                </Link>
-                <Link to={`/ofertas/${oferta._id}/editar`} className="btn btn-secondary">
-                  Editar
-                </Link>
-                <Link to={`/ofertas/${oferta._id}/postulaciones`} className="btn btn-primary">
-                  Ver postulaciones
-                </Link>
-              </div>
+          {ofertas.length === 0 ? (
+            <div className="no-ofertas">
+              <p>Aún no has publicado ninguna oferta.</p>
+              <Link to="/crear-oferta" className="btn btn-primary">
+                Publicar mi primera oferta
+              </Link>
             </div>
-          ))}
+          ) : (
+            <div className="ofertas-grid">
+              {ofertas.map(oferta => (
+                <div key={oferta._id} className="oferta-card">
+                  <h3 className="oferta-titulo">{oferta.titulo}</h3>
+                  <p className="oferta-fecha">
+                    <span className="label">Fecha del evento:</span> {formatearFecha(oferta.fechaEvento)}
+                  </p>
+                  <p className="oferta-genero">
+                    <span className="label">Género musical:</span> {oferta.genero || 'No especificado'}
+                  </p>
+                  <p className="oferta-ubicacion">
+                    <span className="label">Ubicación:</span> {oferta.ubicacion || 'No especificada'}
+                  </p>
+                  <p className="oferta-postulaciones">
+                    <span className="label">Postulaciones:</span> {oferta.postulaciones?.length || 0}
+                  </p>
+                  <div className="oferta-actions">
+                    <Link to={`/ofertas/${oferta._id}`} className="btn btn-secondary">
+                      Ver detalles
+                    </Link>
+                    <Link to={`/ofertas/${oferta._id}/editar`} className="btn btn-secondary">
+                      Editar
+                    </Link>
+                    {/* Corregido el enlace para ver postulaciones */}
+                    <Link to={`/ofertas/${oferta._id}/postulaciones`} className="btn btn-primary">
+                      Ver postulaciones
+                    </Link>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
-      )}
+      </div>
     </div>
   );
 };

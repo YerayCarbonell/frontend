@@ -48,7 +48,7 @@ const Login = () => {
     <div className="auth-container">
       <div className="auth-card">
         <Link to="/" className="auth-logo">
-          <h1>MúsicaConnect</h1>
+        <h1><span className="special">Escen</span><span className="highlight">Arte</span></h1>
         </Link>
         <h2>Iniciar Sesión</h2>
         <p>Accede a tu cuenta para conectar con oportunidades musicales</p>

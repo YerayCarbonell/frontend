@@ -15,7 +15,7 @@ const Sidebar = ({ isOpen, user }) => {
     <div className={`sidebar ${isOpen ? 'open' : ''}`}>
       <div className="sidebar-header">
         <Link to="/" className="sidebar-logo">
-          <h1>MúsicaConnect</h1>
+          <h1>EscenArte</h1>
         </Link>
       </div>
       

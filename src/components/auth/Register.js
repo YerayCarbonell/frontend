@@ -64,6 +64,34 @@ const Register = () => {
     }
   };
 
+  const passwordStrength = (password) => {
+    let strength = 0;
+    if (password.length >= 8) strength++;
+    if (/[a-z]/.test(password)) strength++;
+    if (/[A-Z]/.test(password)) strength++;
+    if (/[0-9]/.test(password)) strength++;
+    if (/[!@#$%^&*()_+\-=\]{};':"\\|,.<>?]/.test(password)) strength++;
+    
+    if (strength === 5) return "Fuerte";
+    else if (strength >= 3) return "Moderada";
+    else return "Débil";
+};
+
+const [passwordStrengthStatus, setPasswordStrengthStatus] = useState('');
+const [showPassword, setShowPassword] = useState(false);
+
+const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+};
+
+const handlePasswordChange = (e) => {
+    const password = e.target.value;
+    setPasswordStrengthStatus(passwordStrength(password));
+    handleChange(e); // Llamar a handleChange para actualizar el estado
+};
+
+
+
   const handleMultiSelect = (e, field) => {
     // Para manejar selecciones múltiples (géneros, instrumentos, tipos de eventos)
     const options = Array.from(e.target.selectedOptions, option => option.value);
@@ -94,11 +122,14 @@ const Register = () => {
   };
 
   const nextStep = () => {
-    if (validateStep1()) {
-      setError('');
-      setStep(2);
+    if (!validateStep1()) {
+        setError('Todos los campos son obligatorios'); // Muestra el mensaje solo si intenta avanzar
+    } else {
+        setError('');
+        setStep(2);
     }
-  };
+};
+
 
   const prevStep = () => {
     setStep(1);
@@ -116,7 +147,7 @@ const Register = () => {
       await axios.post('http://localhost:5000/api/auth/register', dataToSend);
       
       // Redirigir al login después de registro exitoso
-      navigate('/dashboard?registered=true');
+      navigate('/dashboard');
     } catch (err) {
       setError(err.response?.data?.msg || 'Error al registrar el usuario');
     } finally {
@@ -128,7 +159,7 @@ const Register = () => {
     <div className="auth-container">
       <div className="auth-card register-card">
         <Link to="/" className="auth-logo">
-          <h1>MúsicaConnect</h1>
+        <h1><span className="special">Escen</span><span className="highlight">Arte</span></h1>
         </Link>
         <h2>Crear una cuenta</h2>
         <p>
@@ -155,7 +186,10 @@ const Register = () => {
             <span>Soy Organizador</span>
           </div>
         </div>
-        
+        <div>
+            {step === 1 ? 'Paso 1 de 2' : 'Paso 2 de 2'}
+        </div>
+
         <form onSubmit={handleSubmit} className="auth-form">
           {step === 1 ? (
             // Paso 1: Información básica
@@ -189,14 +223,19 @@ const Register = () => {
               <div className="form-group">
                 <label htmlFor="password">Contraseña</label>
                 <input
-                  type="password"
+                  type={showPassword ? 'text' : 'password'}
                   id="password"
                   name="password"
                   value={formData.password}
-                  onChange={handleChange}
+                  onChange={handlePasswordChange}
                   placeholder="Crea una contraseña"
                   required
                 />
+                <button className="toggle-password-btn" onClick={togglePasswordVisibility}>
+                    {showPassword ? 'Ocultar' : 'Mostrar'}
+                </button>
+                <p>Fortaleza de la contraseña: {passwordStrengthStatus}</p>
+
               </div>
               
               <div className="form-group">
