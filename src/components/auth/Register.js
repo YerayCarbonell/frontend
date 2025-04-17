@@ -3,6 +3,9 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import './Auth.css';
+import { useAuth } from '../../context/AuthContext';
+
+import { toast } from 'react-toastify';
 
 const Register = () => {
   const location = useLocation();
@@ -135,18 +138,26 @@ const handlePasswordChange = (e) => {
     setStep(1);
   };
 
+  const { register, login } = useAuth();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
-
+  
     try {
-      // Eliminar confirmPassword antes de enviar al servidor
       const { confirmPassword, ...dataToSend } = formData;
-      
-      await axios.post('http://localhost:5000/api/auth/register', dataToSend);
-      
-      // Redirigir al login después de registro exitoso
+  
+      // Crear el usuario
+      await register(dataToSend);
+  
+      // Login automático
+      await login({ email: formData.email, password: formData.password });
+  
+      // Mostrar mensaje de éxito (opcional)
+      toast.success('¡Registro exitoso! Te hemos enviado un correo de bienvenida.');
+
+      // Redirigir al dashboard
       navigate('/dashboard');
     } catch (err) {
       setError(err.response?.data?.msg || 'Error al registrar el usuario');

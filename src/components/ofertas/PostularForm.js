@@ -6,6 +6,7 @@ import { useAuth } from '../../context/AuthContext';
 import './Ofertas.css';
 import Navbar from '../layout/Navbar';
 import '../../components/common/variables.css';
+import { axiosInstance } from '../../context/AuthContext';
 
 const PostularForm = () => {
   const { id } = useParams(); // ID de la oferta
@@ -33,7 +34,7 @@ const PostularForm = () => {
     // Cargar los detalles de la oferta
     const fetchOferta = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/ofertas/${id}`);
+        const res = await axiosInstance.get(`/ofertas/${id}`);
         setOferta(res.data);
 
         // Verificar si ya se ha postulado a esta oferta
@@ -74,7 +75,7 @@ const PostularForm = () => {
     setError('');
     
     try {
-      await axios.post(`http://localhost:5000/api/ofertas/${id}/postular`, { motivacion: motivacion });
+      await axiosInstance.post(`/ofertas/${id}/postular`, { motivacion: motivacion });
       
       setSuccess('¡Postulación enviada correctamente!');
       

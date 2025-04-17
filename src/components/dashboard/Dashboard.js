@@ -4,7 +4,7 @@ import { useAuth } from '../../context/AuthContext';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import Navbar from '../layout/Navbar';
 import './Dashboard.css';
-import axios from 'axios';
+import { axiosInstance } from '../../context/AuthContext';
 
 const Dashboard = () => {
   const { currentUser, isAuthenticated } = useAuth();
@@ -27,7 +27,7 @@ const Dashboard = () => {
     if (isAuthenticated && currentUser && currentUser._id) {
       if (currentUser.role === 'organizer') {
         // Cargar número de ofertas publicadas por el organizador
-        axios.get(`http://localhost:5000/api/ofertas?organizer=${currentUser._id}`)
+        axiosInstance.get(`/ofertas?organizer=${currentUser._id}`)
           .then(res => setNumOfertas(res.data.length))
           .catch(err => {
             console.error('Error al contar ofertas:', err);
@@ -35,7 +35,7 @@ const Dashboard = () => {
           });
 
         // Cargar número de solicitudes recibidas
-        axios.get(`http://localhost:5000/api/postulaciones/recibidas/${currentUser._id}`)
+        axiosInstance.get(`/postulaciones/recibidas/${currentUser._id}`)
           .then(res => setSolicitudesRecibidas(res.data.length))
           .catch(err => {
             console.error('Error al contar solicitudes recibidas:', err);
@@ -43,7 +43,7 @@ const Dashboard = () => {
           });
 
         // Cargar historial de eventos para organizador
-        axios.get('http://localhost:5000/api/eventos/historial/organizador')
+        axiosInstance.get('/eventos/historial/organizador')
           .then(res => {
             const eventos = res.data || [];
             const hoy = new Date();
@@ -58,7 +58,7 @@ const Dashboard = () => {
 
       if (currentUser.role === 'musician') {
         // Cargar solicitudes enviadas por el músico
-        axios.get(`http://localhost:5000/api/postulaciones/enviadas/${currentUser._id}`)
+        axiosInstance.get(`/postulaciones/usuario/${currentUser._id}`)
           .then(res => setSolicitudesEnviadas(res.data.length))
           .catch(err => {
             console.error('Error al contar solicitudes enviadas:', err);
@@ -66,7 +66,7 @@ const Dashboard = () => {
           });
 
         // Cargar oportunidades disponibles para el músico
-        axios.get('http://localhost:5000/api/ofertas/recomendadas')
+        axiosInstance.get('/ofertas/recomendadas')
           .then(res => setOportunidadesDisponibles(res.data.length))
           .catch(err => {
             console.error('Error al contar oportunidades:', err);
@@ -74,7 +74,7 @@ const Dashboard = () => {
           });
 
         // Cargar historial de eventos para músico
-        axios.get('http://localhost:5000/api/eventos/historial/musico')
+        axiosInstance.get('/eventos/historial/musico')
           .then(res => {
             const eventos = res.data || [];
             const hoy = new Date();

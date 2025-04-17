@@ -8,6 +8,7 @@ import axios from 'axios';
 // Importamos la imagen por defecto
 import defaultProfile from '../../assets/images/default-profile.png';
 import { useParams } from 'react-router-dom';
+import { axiosInstance } from '../../context/AuthContext';
 
 const Profile = () => {
   const { currentUser } = useAuth();
@@ -72,7 +73,7 @@ const Profile = () => {
       } else {
         // Cargar perfil de otro usuario
         try {
-          const res = await axios.get(`http://localhost:5000/api/users/${id}`);
+          const res = await axiosInstance.get(`/users/${id}`);
           const usuario = res.data;
 
           const initData = {
@@ -118,7 +119,7 @@ const Profile = () => {
   const fetchMisPostulaciones = async () => {
     setLoadingPostulaciones(true);
     try {
-      const res = await axios.get(`http://localhost:5000/api/postulaciones/usuario/${currentUser._id}`);
+      const res = await axiosInstance.get(`/postulaciones/usuario/${currentUser._id}`);
       setPostulaciones(res.data);
       setErrorPostulaciones('');
     } catch (err) {
@@ -241,7 +242,7 @@ const Profile = () => {
     formData.append(tipo, file);
   
     try {
-      const res = await axios.post(`http://localhost:5000/api/upload/${tipo}`, formData, {
+      const res = await axiosInstance.post(`/upload/${tipo}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
@@ -263,7 +264,7 @@ const Profile = () => {
         multimedia: updatedMultimedia
       }));
   
-      await axios.put('http://localhost:5000/api/users/profile', {
+      await axiosInstance.put('/users/profile', {
         multimedia: updatedMultimedia
       });
   
@@ -279,7 +280,7 @@ const Profile = () => {
     }
     
     try {
-      await axios.delete(`http://localhost:5000/api/upload/${tipo}`, {
+      await axiosInstance.delete(`/upload/${tipo}`, {
         data: { url }
       });
       
@@ -296,7 +297,7 @@ const Profile = () => {
       }));
       
       // Actualiza en el backend
-      await axios.put('http://localhost:5000/api/users/profile', {
+      await axiosInstance.put('/users/profile', {
         multimedia: updatedMultimedia
       });
       
@@ -320,7 +321,7 @@ const Profile = () => {
     }
     
     try {
-      const response = await axios.put('http://localhost:5000/api/users/profile', payload);
+      const response = await axiosInstance.put('/users/profile', payload);
       alert(response.data.msg);  // "Perfil actualizado exitosamente"
       setIsEditing(false);
       // Actualiza los datos originales con la nueva data del backend
@@ -429,7 +430,7 @@ const Profile = () => {
     formData.append('foto', file);
   
     try {
-      const res = await axios.post('http://localhost:5000/api/upload/profile-photo', formData, {
+      const res = await axiosInstance.post('/upload/profile-photo', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
@@ -438,7 +439,7 @@ const Profile = () => {
       const url = res.data.url;
   
       // Actualiza el backend
-      await axios.put('http://localhost:5000/api/users/profile', {
+      await axiosInstance.put('/users/profile', {
         multimedia: {
           ...profileData.multimedia,
           profilePhoto: url

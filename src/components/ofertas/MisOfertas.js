@@ -5,6 +5,7 @@ import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
 import Navbar from '../layout/Navbar';
 import './Ofertas.css';
+import { axiosInstance } from '../../context/AuthContext';
 
 const MisOfertas = () => {
   const [ofertas, setOfertas] = useState([]);
@@ -28,7 +29,7 @@ const MisOfertas = () => {
     
     const fetchMisOfertas = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/ofertas?organizer=${currentUser._id}`);
+        const res = await axiosInstance.get(`/ofertas?organizer=${currentUser._id}`);
         setOfertas(res.data);
       } catch (err) {
         console.error(err);

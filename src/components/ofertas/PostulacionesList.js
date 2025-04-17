@@ -5,6 +5,7 @@ import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
 import './Ofertas.css';
 import Navbar from '../layout/Navbar';
+import { axiosInstance } from '../../context/AuthContext';
 
 const PostulacionesList = () => {
   const { id } = useParams();
@@ -32,7 +33,7 @@ const PostulacionesList = () => {
     const fetchPostulaciones = async () => {
       try {
         // Primero obtener los detalles de la oferta
-        const ofertaRes = await axios.get(`http://localhost:5000/api/ofertas/${id}`);
+        const ofertaRes = await axiosInstance.get(`/ofertas/${id}`);
         setOferta(ofertaRes.data);
         
         // Verificar que el usuario actual sea el organizador de esta oferta
@@ -47,7 +48,7 @@ const PostulacionesList = () => {
         }
         
         // Obtener las postulaciones para esta oferta
-        const postulacionesRes = await axios.get(`http://localhost:5000/api/ofertas/${id}/postulaciones`);
+        const postulacionesRes = await axiosInstance.get(`/ofertas/${id}/postulaciones`);
         setPostulaciones(postulacionesRes.data);
         setError('');
       } catch (err) {
@@ -70,16 +71,16 @@ const PostulacionesList = () => {
         'Si la cierras, no recibirás más postulaciones.');
       
       // Llamar a la API con el parámetro adicional
-      await axios.post(`http://localhost:5000/api/ofertas/${id}/postulaciones/${postulacionId}/aceptar`, {
+      await axiosInstance.post(`/ofertas/${id}/postulaciones/${postulacionId}/aceptar`, {
         cerrarOferta
       });
       
       // Actualizar el estado de las postulaciones
-      const postulacionesRes = await axios.get(`http://localhost:5000/api/ofertas/${id}/postulaciones`);
+      const postulacionesRes = await axiosInstance.get(`/ofertas/${id}/postulaciones`);
       setPostulaciones(postulacionesRes.data);
       
       // Actualizar la información de la oferta
-      const ofertaRes = await axios.get(`http://localhost:5000/api/ofertas/${id}`);
+      const ofertaRes = await axiosInstance.get(`/ofertas/${id}`);
       setOferta(ofertaRes.data);
       
       // Enviar mensaje automático al músico (obtenemos la info del músico de las postulaciones actualizadas)
@@ -88,7 +89,7 @@ const PostulacionesList = () => {
       if (musicoPostulacion && typeof musicoPostulacion === 'object' && musicoPostulacion._id) {
         try {
           // Verificamos que estamos usando la URL correcta según App.js
-          await axios.post(`http://localhost:5000/api/chat/mensajes`, {
+          await axiosInstance.post(`/chat/mensajes`, {
             receiver: musicoPostulacion._id,
             content: `¡Hola! Tu postulación para "${oferta.titulo}" ha sido aceptada. Puedes usar este chat para coordinar los detalles del evento.`,
             oferta: id  // Incluye la referencia a la oferta
@@ -122,10 +123,10 @@ const PostulacionesList = () => {
     try {
       setLoading(true);
       // Intentar ahora usando los endpoints específicos
-      await axios.post(`http://localhost:5000/api/ofertas/${id}/postulaciones/${postulacionId}/rechazar`);
+      await axiosInstance.post(`/ofertas/${id}/postulaciones/${postulacionId}/rechazar`);
       
       // Actualizar el estado de las postulaciones
-      const postulacionesRes = await axios.get(`http://localhost:5000/api/ofertas/${id}/postulaciones`);
+      const postulacionesRes = await axiosInstance.get(`/ofertas/${id}/postulaciones`);
       setPostulaciones(postulacionesRes.data);
       
       setSuccess('Postulación rechazada correctamente.');

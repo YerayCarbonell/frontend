@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
 import Navbar from '../layout/Navbar';
 import './Mensajes.css';
+import { axiosInstance } from '../../context/AuthContext';
 
 // Importamos iconos necesarios
 const ArrowLeftIcon = () => (
@@ -56,17 +56,17 @@ const Mensajes = () => {
         const fetchData = async () => {
             try {
                 // Obtener información del usuario
-                const userRes = await axios.get(`http://localhost:5000/api/users/${userId}`, {
+                const userRes = await axiosInstance.get(`/users/${userId}`, {
                     headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                        'Authorization': `Bearer ${sessionStorage.getItem('token')}`
                     }
                 });
                 setUsuario(userRes.data);
 
                 // Obtener mensajes entre el usuario actual y el usuario especificado
-                const mensajesRes = await axios.get(`http://localhost:5000/api/chat/mensajes/${userId}`, {
+                const mensajesRes = await axiosInstance.get(`/chat/mensajes/${userId}`, {
                     headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                        'Authorization': `Bearer ${sessionStorage.getItem('token')}`
                     }
                 });
                 setMensajes(mensajesRes.data);
@@ -87,9 +87,9 @@ const Mensajes = () => {
 
                 if (ofertaId) {
                 try {
-                    const ofertaRes = await axios.get(`http://localhost:5000/api/ofertas/${ofertaId}`, {
+                    const ofertaRes = await axiosInstance.get(`/ofertas/${ofertaId}`, {
                     headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                        'Authorization': `Bearer ${sessionStorage.getItem('token')}`
                     }
                     });
                     setOfertaRelacionada(ofertaRes.data);
@@ -153,15 +153,15 @@ const Mensajes = () => {
                 mensajeData.oferta = ofertaRelacionada._id;
             }
             
-            await axios.post(`http://localhost:5000/api/chat/mensajes`, mensajeData, {
+            await axiosInstance.post(`/chat/mensajes`, mensajeData, {
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    'Authorization': `Bearer ${sessionStorage.getItem('token')}`
                 }
             });
 
-            const mensajesRes = await axios.get(`http://localhost:5000/api/chat/mensajes/${userId}`, {
+            const mensajesRes = await axiosInstance.get(`/chat/mensajes/${userId}`, {
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    'Authorization': `Bearer ${sessionStorage.getItem('token')}`
                 }
             });
             
@@ -230,9 +230,9 @@ const Mensajes = () => {
     // Marcar mensajes como leídos
     const marcarComoLeidos = async () => {
         try {
-            await axios.put(`http://localhost:5000/api/chat/mensajes/leer/${userId}`, {}, {
+            await axiosInstance.put(`/chat/mensajes/leer/${userId}`, {}, {
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    'Authorization': `Bearer ${sessionStorage.getItem('token')}`
                 }
             });
         } catch (err) {

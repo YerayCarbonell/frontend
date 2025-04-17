@@ -24,6 +24,10 @@ import ListaMensajes from './src/components/mensajes/ListaMensajes';
 
 import HistorialEventos from './src/components/historial/HistorialEventos';
 
+
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
+
 function App() {
   return (
     <Router>
@@ -71,6 +75,8 @@ function App() {
           {/* Ruta 404 */}
           <Route path="*" element={<NotFound />} />
         </Routes>
+        <ToastContainer position="top-right" autoClose={5000} />
+
       </AuthProvider>
     </Router>
   );

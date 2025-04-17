@@ -7,20 +7,36 @@ const AuthContext = createContext();
 
 export const useAuth = () => useContext(AuthContext);
 
+export const axiosInstance = axios.create({
+  baseURL: 'http://localhost:5000/api'
+});
+
+axiosInstance.interceptors.request.use(
+  (config) => {
+    const token = sessionStorage.getItem('token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [token, setToken] = useState(localStorage.getItem('token'));
+  const [token, setToken] = useState(sessionStorage.getItem('token'));
   const navigate = useNavigate();
 
   // Configurar axios para enviar el token en cada solicitud
+/*
   useEffect(() => {
     if (token) {
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     } else {
-      delete axios.defaults.headers.common['Authorization'];
+      delete axiosInstance.defaults.headers.common['Authorization'];
     }
-  }, [token]);
+  }, [token]);*/
 
   // Comprobar si hay un usuario autenticado al cargar la aplicación
   useEffect(() => {
@@ -28,14 +44,14 @@ export const AuthProvider = ({ children }) => {
       if (token) {
         try {
           // Realiza la llamada al endpoint que devuelve el usuario autenticado.
-          const res = await axios.get('http://localhost:5000/api/users/me');
+          const res = await axiosInstance.get('/users/me');
           setCurrentUser(res.data);
-          // Actualiza el usuario en localStorage para mantener la consistencia.
-          localStorage.setItem('user', JSON.stringify(res.data));
+          // Actualiza el usuario en sessionStorage para mantener la consistencia.
+          sessionStorage.setItem('user', JSON.stringify(res.data));
         } catch (err) {
           // Si el token ya no es válido o se produce un error, limpia la información.
-          localStorage.removeItem('token');
-          localStorage.removeItem('user');
+          sessionStorage.removeItem('token');
+          sessionStorage.removeItem('user');
           setToken(null);
           setCurrentUser(null);
         }
@@ -48,9 +64,9 @@ export const AuthProvider = ({ children }) => {
 
   // Función para login
   const login = async (formData) => {
-    const res = await axios.post('http://localhost:5000/api/auth/login', formData);
-    localStorage.setItem('token', res.data.token);
-    localStorage.setItem('user', JSON.stringify(res.data.user));
+    const res = await axiosInstance.post('auth/login', formData);
+    sessionStorage.setItem('token', res.data.token);
+    sessionStorage.setItem('user', JSON.stringify(res.data.user));
     setToken(res.data.token);
     setCurrentUser(res.data.user);
     return res.data;
@@ -58,14 +74,14 @@ export const AuthProvider = ({ children }) => {
 
   // Función para registro
   const register = async (formData) => {
-    const res = await axios.post('http://localhost:5000/api/auth/register', formData);
+    const res = await axiosInstance.post('/auth/register', formData);
     return res.data;
   };
 
   // Función para logout
   const logout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
+    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('user');
     setToken(null);
     setCurrentUser(null);
     navigate('/');

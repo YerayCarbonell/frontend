@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
 import Navbar from '../../components/layout/Navbar';
+import { axiosInstance } from '../../context/AuthContext';
 
 const MisPostulaciones = () => {
   const [postulaciones, setPostulaciones] = useState([]);
@@ -28,7 +29,7 @@ const MisPostulaciones = () => {
     const fetchMisPostulaciones = async () => {
       setLoading(true);
       try {
-        const res = await axios.get(`http://localhost:5000/api/postulaciones/usuario/${currentUser._id}`);
+        const res = await axiosInstance.get(`/postulaciones/usuario/${currentUser._id}`);
         const ordenadas = res.data.sort((a, b) => new Date(b.fechaPostulacion) - new Date(a.fechaPostulacion));
         setPostulaciones(ordenadas);
 

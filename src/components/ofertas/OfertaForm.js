@@ -1,10 +1,10 @@
 // src/components/ofertas/OfertaForm.js
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
-import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
 import './Ofertas.css';
 import Navbar from '../layout/Navbar';
+import { axiosInstance } from '../../context/AuthContext';
 
 const OfertaForm = () => {
   const { id } = useParams(); // Si existe id, estamos editando; si no, creando
@@ -38,7 +38,7 @@ const OfertaForm = () => {
     if (isEditing) {
       const fetchOferta = async () => {
         try {
-          const res = await axios.get(`http://localhost:5000/api/ofertas/${id}`);
+          const res = await axiosInstance.get(`/ofertas/${id}`);
           
           // Corregido: Verificar que la oferta pertenece al organizador actual
           const organizadorId = res.data.organizer._id || res.data.organizer;
@@ -99,20 +99,21 @@ const OfertaForm = () => {
       }
       
       // Obtener el token de autenticación
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       
       if (!token) {
         throw new Error('No hay sesión activa. Por favor, inicia sesión nuevamente.');
       }
       
       // Configurar headers correctamente
+      /*
       const config = {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         }
       };
-      
+      */
       // Preparar datos para enviar - evitar campos vacíos
       const dataToSend = {
         titulo: formData.titulo.trim(),
@@ -124,17 +125,18 @@ const OfertaForm = () => {
       };
       
       // Para depuración
+      /*
       console.log('Enviando datos:', dataToSend);
       console.log('Headers:', config.headers);
-      
+      */
       let res;
       if (isEditing) {
         // Actualizar oferta existente
-        res = await axios.put(`http://localhost:5000/api/ofertas/${id}`, dataToSend, config);
+        res = await axiosInstance.put(`/ofertas/${id}`, dataToSend);
         setSuccess('Oferta actualizada correctamente');
       } else {
         // Crear nueva oferta
-        res = await axios.post('http://localhost:5000/api/ofertas', dataToSend, config);
+        res = await axiosInstance.post('/ofertas', dataToSend);
         setSuccess('Oferta creada correctamente');
       }
       

@@ -5,6 +5,7 @@ import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
 import './Ofertas.css';
 import Navbar from '../layout/Navbar';
+import { axiosInstance } from '../../context/AuthContext';
 
 const OfertaDetail = () => {
   const { id } = useParams();
@@ -18,7 +19,7 @@ const OfertaDetail = () => {
   useEffect(() => {
     const fetchOferta = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/ofertas/${id}`);
+        const res = await axiosInstance.get(`/ofertas/${id}`);
         setOferta(res.data);
         setError('');
       } catch (err) {
@@ -46,7 +47,7 @@ const OfertaDetail = () => {
         }
       };
       
-      await axios.delete(`http://localhost:5000/api/ofertas/${id}`, config);
+      await axiosInstance.delete(`/ofertas/${id}`, config);
       navigate('/ofertas', { state: { message: 'Oferta eliminada correctamente.' } });
     } catch (err) {
       console.error(err);

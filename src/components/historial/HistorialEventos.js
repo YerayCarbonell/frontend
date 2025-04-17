@@ -1,10 +1,12 @@
 // src/components/historial/HistorialEventos.js
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
 import Navbar from '../layout/Navbar';
 import './Historial.css';
+import { axiosInstance } from '../../context/AuthContext';
+
+
 
 const HistorialEventos = () => {
   const [eventos, setEventos] = useState([]);
@@ -29,12 +31,12 @@ const HistorialEventos = () => {
         let url;
         // Diferentes endpoints según el rol del usuario
         if (currentUser.role === 'organizer') {
-          url = `http://localhost:5000/api/eventos/historial/organizador`;
+          url = `/eventos/historial/organizador`;
         } else {
-          url = `http://localhost:5000/api/eventos/historial/musico`;
+          url = `/eventos/historial/musico`;
         }
         
-        const res = await axios.get(url);
+        const res = await axiosInstance.get(url);
         setEventos(res.data);
       } catch (err) {
         console.error(err);
@@ -70,14 +72,14 @@ const HistorialEventos = () => {
   // Calificar un evento (para músicos)
   const calificarEvento = async (eventoId) => {
     try {
-      await axios.post(`http://localhost:5000/api/eventos/${eventoId}/calificar`, {
+      await axiosInstanceInstance.post(`/eventos/${eventoId}/calificar`, {
         calificacion,
         comentario
       });
       
       // Recargar los datos
-      const url = `http://localhost:5000/api/eventos/historial/musico`;
-      const res = await axios.get(url);
+      const url = `/eventos/historial/musico`;
+      const res = await axiosInstanceInstance.get(url);
       setEventos(res.data);
       
       // Resetear el estado

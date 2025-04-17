@@ -5,6 +5,7 @@ import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
 import './Ofertas.css';
 import Navbar from '../layout/Navbar';
+import { axiosInstance } from '../../context/AuthContext';
 
 const OfertasList = () => {
   const [ofertas, setOfertas] = useState([]);
@@ -28,7 +29,7 @@ const OfertasList = () => {
       if (params.orden) queryParams.append('orden', params.orden);
 
       
-      const res = await axios.get(`http://localhost:5000/api/ofertas?${queryParams.toString()}`);
+      const res = await axiosInstance.get(`/ofertas?${queryParams.toString()}`);
       let ofertasOrdenadas = res.data;
       
       switch (params.orden) {

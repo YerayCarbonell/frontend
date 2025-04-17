@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
 import Navbar from '../layout/Navbar';
 import './Mensajes.css';
+import { axiosInstance } from '../../context/AuthContext';
 
 const ListaMensajes = () => {
   const { isAuthenticated, currentUser } = useAuth();
@@ -20,8 +21,8 @@ const ListaMensajes = () => {
 
     const fetchConversaciones = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/chat/conversaciones', {
-          headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        const res = await axiosInstance.get('/chat/conversaciones', {
+          headers: { 'Authorization': `Bearer ${sessionStorage.getItem('token')}` }
         });
         setConversaciones(res.data);
       } catch (err) {
