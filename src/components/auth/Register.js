@@ -242,9 +242,14 @@ const handlePasswordChange = (e) => {
                   placeholder="Crea una contraseña"
                   required
                 />
-                <button className="toggle-password-btn" onClick={togglePasswordVisibility}>
-                    {showPassword ? 'Ocultar' : 'Mostrar'}
+                <button
+                  type="button"
+                  className="toggle-password-btn"
+                  onClick={togglePasswordVisibility}
+                >
+                  {showPassword ? 'Ocultar' : 'Mostrar'}
                 </button>
+
                 <p>Fortaleza de la contraseña: {passwordStrengthStatus}</p>
 
               </div>

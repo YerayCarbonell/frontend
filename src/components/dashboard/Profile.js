@@ -9,6 +9,7 @@ import axios from 'axios';
 import defaultProfile from '../../assets/images/default-profile.png';
 import { useParams } from 'react-router-dom';
 import { axiosInstance } from '../../context/AuthContext';
+import UserRatings from '../ratings/UserRatings';
 
 const Profile = () => {
   const { currentUser } = useAuth();
@@ -46,16 +47,18 @@ const Profile = () => {
             bio: currentUser.profile?.bio || '',
             phone: currentUser.profile?.phone || '',
             location: currentUser.profile?.location || '',
-            // Datos específicos para Músicos
             genres: currentUser.profile?.genres || [],
             instruments: currentUser.profile?.instruments || [],
             experience: currentUser.profile?.experience || '',
-            // Datos específicos para Organizadores
+            tarifa: {
+              monto: currentUser.profile?.tarifa?.monto || 0,
+              descripcion: currentUser.profile?.tarifa?.descripcion || ''
+            },
             venueName: currentUser.profile?.venueName || '',
             venueType: currentUser.profile?.venueType || '',
             capacity: currentUser.profile?.capacity || '',
             eventTypes: currentUser.profile?.eventTypes || []
-          },
+          },          
           multimedia: {
             profilePhoto: currentUser.multimedia?.profilePhoto || '',
             fotos: currentUser.multimedia?.fotos || [],
@@ -81,17 +84,22 @@ const Profile = () => {
             email: usuario.email || '',
             role: usuario.role || '',
             profile: {
-              bio: usuario.profile?.bio || '',
-              phone: usuario.profile?.phone || '',
-              location: usuario.profile?.location || '',
-              genres: usuario.profile?.genres || [],
-              instruments: usuario.profile?.instruments || [],
-              experience: usuario.profile?.experience || '',
-              venueName: usuario.profile?.venueName || '',
-              venueType: usuario.profile?.venueType || '',
-              capacity: usuario.profile?.capacity || '',
-              eventTypes: usuario.profile?.eventTypes || []
+              bio: currentUser.profile?.bio || '',
+              phone: currentUser.profile?.phone || '',
+              location: currentUser.profile?.location || '',
+              genres: currentUser.profile?.genres || [],
+              instruments: currentUser.profile?.instruments || [],
+              experience: currentUser.profile?.experience || '',
+              tarifa: {
+                monto: currentUser.profile?.tarifa?.monto || 0,
+                descripcion: currentUser.profile?.tarifa?.descripcion || ''
+              },
+              venueName: currentUser.profile?.venueName || '',
+              venueType: currentUser.profile?.venueType || '',
+              capacity: currentUser.profile?.capacity || '',
+              eventTypes: currentUser.profile?.eventTypes || []
             },
+            
             multimedia: {
               profilePhoto: usuario.multimedia?.profilePhoto || '',
               fotos: usuario.multimedia?.fotos || [],
@@ -157,16 +165,36 @@ const Profile = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+    
     if (name.includes('.')) {
-      const [section, field] = name.split('.');
-      setProfileData(prevState => ({
-        ...prevState,
-        [section]: {
-          ...prevState[section],
-          [field]: value
-        }
-      }));
+      const parts = name.split('.');
+      
+      if (parts.length === 2) {
+        // Manejo actual para profile.bio, profile.phone, etc.
+        const [section, field] = parts;
+        setProfileData(prevState => ({
+          ...prevState,
+          [section]: {
+            ...prevState[section],
+            [field]: value
+          }
+        }));
+      } else if (parts.length === 3) {
+        // Manejo para profile.tarifa.monto, profile.tarifa.descripcion
+        const [section, subsection, field] = parts;
+        setProfileData(prevState => ({
+          ...prevState,
+          [section]: {
+            ...prevState[section],
+            [subsection]: {
+              ...prevState[section]?.[subsection],
+              [field]: field === 'monto' ? parseFloat(value) : value
+            }
+          }
+        }));
+      }
     } else {
+      // Código existente para campos simples
       setProfileData(prevState => ({
         ...prevState,
         [name]: value
@@ -217,7 +245,14 @@ const Profile = () => {
         updatedProfile.eventTypes = profileData.profile.eventTypes;
       }
     }
-  
+    if (currentUser.role === 'musician' && profileData.profile?.tarifa) {
+      if (profileData.profile?.tarifa) {
+        updatedProfile.tarifa = {
+          monto: profileData.profile.tarifa.monto || 0,
+          descripcion: profileData.profile.tarifa.descripcion || ''
+        };
+      }
+    }
     if (Object.keys(updatedProfile).length > 0) {
       payload.profile = updatedProfile;
     }
@@ -598,6 +633,31 @@ const Profile = () => {
               </select>
             </div>
           </div>
+          <div className="form-group">
+            <label htmlFor="profile.tarifa.monto">Tarifa (€)</label>
+            <input
+              type="number"
+              id="profile.tarifa.monto"
+              name="profile.tarifa.monto"
+              value={profileData.profile?.tarifa?.monto || ''}
+              onChange={handleInputChange}
+            />
+          </div>
+          
+          <div className="form-group">
+            <label htmlFor="profile.tarifa.descripcion">Descripción de la tarifa</label>
+            <select
+              id="profile.tarifa.descripcion"
+              name="profile.tarifa.descripcion"
+              value={profileData.profile?.tarifa?.descripcion || ''}
+              onChange={handleInputChange}
+            >
+              <option value="">Seleccionar...</option>
+              <option value="Por evento">Por evento</option>
+              <option value="Por hora">Por hora</option>
+              <option value="Negociable">Negociable</option>
+            </select>
+          </div>
 
           <div className="form-section">
             <h2>Multimedia</h2>
@@ -691,6 +751,12 @@ const Profile = () => {
                   <p>{profileData.profile.experience}</p>
                 </div>
               )}
+              {profileData.profile?.tarifa?.monto && (
+                <div className="info-item">
+                  <h3>Tarifa</h3>
+                  <p>{profileData.profile.tarifa.monto}€ {profileData.profile.tarifa.descripcion}</p>
+                </div>
+              )}
             </div>
           </div>
 
@@ -757,7 +823,10 @@ const Profile = () => {
               <p className="empty-audio-message">No hay pistas de audio disponibles</p>
             )}
           </div>
-
+          <div className="profile-section">
+            <h2>Valoraciones recibidas</h2>
+            <UserRatings userId={id || currentUser?._id} />
+          </div>
         </div>
       )}
     </div>
@@ -1031,6 +1100,10 @@ const Profile = () => {
             ) : (
               <p className="empty-gallery-message">No hay fotos disponibles</p>
             )}
+          </div>
+          <div className="profile-section">
+            <h2>Valoraciones recibidas</h2>
+            <UserRatings userId={id || currentUser?._id} />
           </div>
         </div>
       )}

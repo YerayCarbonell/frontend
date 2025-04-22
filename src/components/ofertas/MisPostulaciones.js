@@ -85,7 +85,7 @@ const MisPostulaciones = () => {
     <div className="main-content-padding">
       <div className="ofertas-container">
         <div className="mis-postulaciones-header">
-          <h1>Mis Postulaciones</h1>
+          <h1>Mis postulaciones</h1>
           <Link to="/ofertas" className="btn btn-primary">
             Explorar ofertas
           </Link>

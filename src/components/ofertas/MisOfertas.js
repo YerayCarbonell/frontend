@@ -70,7 +70,7 @@ const MisOfertas = () => {
       <div className="main-content-padding">
         <div className="ofertas-container">
           <div className="mis-ofertas-header">
-            <h1>Mis Ofertas Publicadas</h1>
+            <h1>Mis ofertas publicadas</h1>
             <Link to="/crear-oferta" className="btn btn-primary">
               Publicar nueva oferta
             </Link>

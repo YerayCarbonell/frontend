@@ -294,44 +294,6 @@ const Dashboard = () => {
         </div>
       )}
 
-      <div className="dashboard-section">
-        <h2>Músicos recomendados</h2>
-        <div className="musician-list">
-          <div className="musician-card">
-            <div className="musician-avatar">
-              <img src="/api/placeholder/80/80" alt="Músico" />
-            </div>
-            <div className="musician-info">
-              <h3>Carlos Martínez</h3>
-              <p>Guitarrista y cantante</p>
-              <div className="musician-tags">
-                <span>Pop/Rock</span>
-                <span>Acústico</span>
-                <span>7 años exp.</span>
-              </div>
-            </div>
-            <Link to="/musicos" className="btn btn-primary">Ver perfil</Link>
-          </div>
-          <div className="musician-card">
-            <div className="musician-avatar">
-              <img src="/api/placeholder/80/80" alt="Músico" />
-            </div>
-            <div className="musician-info">
-              <h3>Laura Sánchez</h3>
-              <p>Pianista y compositora</p>
-              <div className="musician-tags">
-                <span>Jazz</span>
-                <span>Clásica</span>
-                <span>10 años exp.</span>
-              </div>
-            </div>
-            <Link to="/musicos" className="btn btn-primary">Ver perfil</Link>
-          </div>
-        </div>
-        <div className="ver-mas">
-          <Link to="/musicos" className="btn btn-secondary">Ver todos los músicos</Link>
-        </div>
-      </div>
       
       {/* Historial de eventos recientes */}
       {historialEventos.length > 0 && (

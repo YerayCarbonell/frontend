@@ -645,26 +645,9 @@ body {
   gap: 1.5rem;
 }
 
-.postulacion-card {
-  background-color: var(--light-color);
-  border-radius: var(--border-radius);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  padding: 1.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
 .postulacion-info {
-  flex: 1;
-}
-
-.postulacion-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  justify-content: center;
-  min-width: 150px;
+  flex: 1 1 65%;
+  min-width: 250px;
 }
 
 .postulacion-card h3 {
@@ -727,9 +710,7 @@ body {
 
 
 /* -- Mis postulaciones -- */
-.postulacion-card {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
+
 .postulacion-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 4px 15px rgba(0,0,0,0.1);
@@ -792,77 +773,161 @@ body {
 }
 
 .postulacion-card {
-  background-color: var(--light-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2rem;
   padding: 2rem;
+  background-color: var(--light-color);
   border-radius: var(--border-radius);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  flex-wrap: wrap;
 }
 
 .postulacion-content {
-  flex: 1;
+  flex: 1 1 65%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 .postulacion-actions {
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
+  flex: 0 0 160px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: stretch;
 }
 
-@media (max-width: 768px) {
-  .mis-postulaciones-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
+/* Adiciones para Ofertas.css */
+
+.postulacion-tarifa {
+  margin-bottom: 10px;
+  font-weight: normal;
+}
+
+.postulacion-tarifa .label {
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+.btn-pago {
+  background-color: #2ecc71 ;
+  color: white;
+ 
+  
+}
+
+.btn-pago:hover {
+  background-color:  #18a653;
+  color: white;
+}
+
+.btn-pago i {
+  font-size: 16px;
+}
+
+
+.paginacion {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  gap: 10px;
+}
+
+.paginacion .ellipsis {
+  padding: 0.5rem 1rem;
+  cursor: default;
+  user-select: none; 
+}
+/* Correcciones específicas para la vista de ofertas en móviles */
+@media (max-width: 480px) {
+  /* Contenedor principal con mejor padding */
+  .ofertas-container {
+    padding: 1rem 0.75rem;
+    width: 100%;
+    max-width: 100%;
   }
   
-  .postulacion-card {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .postulacion-actions {
+  /* Ajuste del título principal */
+  .ofertas-header h1 {
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
     width: 100%;
-    flex-direction: column;
+  }
+  
+  /* Mejoras a los filtros */
+  .filtros-container {
+    padding: 0.75rem;
+    width: 100%;
+  }
+  
+  .filtro-group {
+    margin-bottom: 0.75rem;
+  }
+  
+  .filtro-group label {
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
+  }
+  
+  .filtro-group select {
+    width: 100%;
+    padding: 0.5rem;
+    font-size: 0.9rem;
+  }
+  
+  /* Botón de aplicar filtros */
+  .filtros-container .btn {
+    width: 100%;
+    margin-top: 0.5rem;
+    padding: 0.6rem;
+  }
+  
+  /* Tarjetas de ofertas */
+  .oferta-card {
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .oferta-titulo {
+    font-size: 1.25rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  /* Ajuste para la descripción y otros textos */
+  .oferta-card p, .oferta-descripcion {
+    font-size: 0.9rem;
   }
 }
 
-/* --- Media Queries --- */
-@media (min-width: 768px) {
-  .oferta-detail-header {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
+/* Específicamente para iPhone */
+@media (max-width: 430px) {
+  .ofertas-container {
+    padding: 3.5rem 0.5rem;
   }
-
-  .oferta-detail-content {
-    grid-template-columns: 2fr 3fr;
-  }
-
-  .oferta-info-item {
-    flex-direction: row;
+  
+  .filtros-form {
     gap: 0.5rem;
   }
-
-  .oferta-info-item .label {
-    min-width: 120px;
-  }
-
-  .postulaciones-header {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .postulacion-card {
-    flex-direction: row;
-    justify-content: space-between;
-  }
 }
+@media (max-width: 768px) {
+  .postulacion-card {
+    flex-direction: column;
+    align-items: stretch;
+  }
 
-@media (max-width: 767px) {
   .postulacion-actions {
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: flex-start;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .postulacion-actions .btn {
+    flex: 1 1 auto;
+    min-width: 100px;
+    text-align: center;
   }
 }

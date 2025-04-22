@@ -16,7 +16,9 @@ const HistorialEventos = () => {
   const [calificandoEvento, setCalificandoEvento] = useState(null);
   const [calificacion, setCalificacion] = useState(0);
   const [comentario, setComentario] = useState('');
-  
+  const [valorandoUsuario, setValorandoUsuario] = useState(null);
+  const [valoracionCalificacion, setValoracionCalificacion] = useState(0);
+  const [valoracionComentario, setValoracionComentario] = useState('');
   const { currentUser, isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
@@ -68,7 +70,36 @@ const HistorialEventos = () => {
     const hoy = new Date();
     return fechaEvento < hoy;
   };
-  
+  const valorarUsuario = async (eventoId, usuarioId) => {
+    try {
+      await axiosInstance.post(`/ratings`, {
+        ofertaId: eventoId, // Antes: ofertaId (que no estaba definido)
+        evaluadoId: usuarioId,
+        calificacion: valoracionCalificacion,
+        comentario: valoracionComentario
+      });
+      
+      // Recargar los datos
+      let url;
+      if (currentUser.role === 'organizer') {
+        url = `/eventos/historial/organizador`;
+      } else {
+        url = `/eventos/historial/musico`;
+      }
+      const res = await axiosInstance.get(url);
+      setEventos(res.data);
+      
+      // Resetear el estado
+      setValorandoUsuario(null);
+      setValoracionCalificacion(0);
+      setValoracionComentario('');
+      
+      alert('¡Gracias por tu valoración!');
+    } catch (err) {
+      console.error(err);
+      alert('Error al enviar la valoración: ' + (err.response?.data?.msg || err.message));
+    }
+  };
   // Calificar un evento (para músicos)
   const calificarEvento = async (eventoId) => {
     try {
@@ -202,13 +233,26 @@ const HistorialEventos = () => {
                             <ul>
                               {evento.musicos.map(musico => (
                                 <li key={musico._id}>
-                                  <span>{musico.name}</span>
-                                  <button 
-                                    onClick={() => navigate(`/mensajes/${musico._id}`)}
-                                    className="btn btn-small"
-                                  >
-                                    Contactar
-                                  </button>
+                                  <Link to={`/perfil/${musico._id}`}>
+                                    <span>{musico.name}</span>
+                                  </Link>
+                                  <div className="acciones-musico">
+                                    <button 
+                                      onClick={() => navigate(`/mensajes/${musico._id}`)}
+                                      className="btn btn-small"
+                                    >
+                                      Contactar
+                                    </button>
+                                    
+                                    {activeTab === 'pasados' && (
+                                      <button 
+                                        className="btn btn-small btn-valorar"
+                                        onClick={() => setValorandoUsuario({ id: musico._id, evento: evento._id, nombre: musico.name })}
+                                      >
+                                        Valorar
+                                      </button>
+                                    )}
+                                  </div>
                                 </li>
                               ))}
                             </ul>
@@ -219,53 +263,22 @@ const HistorialEventos = () => {
                       ) : (
                         <div className="evento-organizador">
                           <p>
-                            <span className="label">Organizador:</span> {evento.organizador?.name || 'No disponible'}
+                            <span className="label">Organizador:</span> 
+                            <Link to={`/perfil/${evento.organizador?._id}`}>
+                              {evento.organizador?.name || 'No disponible'}
+                            </Link>
                           </p>
-                          {activeTab === 'pasados' && !evento.calificado && calificandoEvento !== evento._id && (
-                            <div className="evento-calificar">
-                              <button 
-                                className="btn btn-secondary" 
-                                onClick={() => setCalificandoEvento(evento._id)}
-                              >
-                                Calificar evento
-                              </button>
-                            </div>
-                          )}
-                          
-                          {calificandoEvento === evento._id && (
-                            <div className="calificacion-form">
-                              <h4>Tu valoración:</h4>
-                              <div className="rating-stars">
-                                {[1, 2, 3, 4, 5].map(star => (
-                                  <button 
-                                    key={star} 
-                                    className={`star-btn ${star <= calificacion ? 'active' : ''}`}
-                                    onClick={() => setCalificacion(star)}
-                                  >                                  ★
-                                  </button>
-                                ))}
-                              </div>
-                              <textarea
-                                className="comentario-textarea"
-                                placeholder="Escribe un comentario opcional..."
-                                value={comentario}
-                                onChange={(e) => setComentario(e.target.value)}
-                              />
-                              <div className="form-buttons">
-                                <button 
-                                  className="btn btn-primary"
-                                  onClick={() => calificarEvento(evento._id)}
-                                >
-                                  Enviar calificación
-                                </button>
-                                <button 
-                                  className="btn btn-secondary"
-                                  onClick={cancelarCalificacion}
-                                >
-                                  Cancelar
-                                </button>
-                              </div>
-                            </div>
+                          {activeTab === 'pasados' && (
+                            <button 
+                              className="btn btn-secondary" 
+                              onClick={() => setValorandoUsuario({ 
+                                id: evento.organizador?._id, 
+                                evento: evento._id, 
+                                nombre: evento.organizador?.name 
+                              })}
+                            >
+                              Valorar Organizador
+                            </button>
                           )}
                         </div>
                       )}
@@ -273,6 +286,49 @@ const HistorialEventos = () => {
                   ))}
                 </div>
               )}
+            </div>
+          )}
+          {valorandoUsuario && (
+            <div className="modal-valoracion">
+              <div className="modal-content">
+                <h3>Valorar a {valorandoUsuario.nombre}</h3>
+                <div className="rating-stars">
+                  {[1, 2, 3, 4, 5].map(star => (
+                    <button 
+                      key={star} 
+                      className={`star-btn ${star <= valoracionCalificacion ? 'active' : ''}`}
+                      onClick={() => setValoracionCalificacion(star)}
+                    >
+                      ★
+                    </button>
+                  ))}
+                </div>
+                <textarea
+                  className="comentario-textarea"
+                  placeholder="Escribe un comentario (opcional)..."
+                  value={valoracionComentario}
+                  onChange={(e) => setValoracionComentario(e.target.value)}
+                />
+                <div className="modal-buttons">
+                  <button 
+                    className="btn btn-primary"
+                    onClick={() => valorarUsuario(valorandoUsuario.evento, valorandoUsuario.id)}
+                    disabled={valoracionCalificacion === 0}
+                  >
+                    Enviar valoración
+                  </button>
+                  <button 
+                    className="btn btn-secondary"
+                    onClick={() => {
+                      setValorandoUsuario(null);
+                      setValoracionCalificacion(0);
+                      setValoracionComentario('');
+                    }}
+                  >
+                    Cancelar
+                  </button>
+                </div>
+              </div>
             </div>
           )}
         </div>

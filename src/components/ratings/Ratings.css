@@ -1,0 +1,193 @@
+/* src/components/ratings/Ratings.css */
+.valoraciones-container {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+  }
+  
+  .valoraciones-resumen {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e5e5e5;
+  }
+  
+  .valoracion-promedio {
+    display: flex;
+    align-items: center;
+  }
+  
+  .promedio-numero {
+    font-size: 36px;
+    font-weight: bold;
+    margin-right: 15px;
+    color: #333;
+  }
+  
+  .estrellas-promedio {
+    margin-right: 10px;
+  }
+  
+  .estrella {
+    font-size: 20px;
+    color: #ddd;
+    margin-right: 2px;
+  }
+  
+  .estrella.activa {
+    color: #ffc107;
+  }
+  
+  .total-valoraciones {
+    color: #777;
+    font-size: 14px;
+  }
+  
+  .valoraciones-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .valoracion-item {
+    background-color: #f9f9f9;
+    border-radius: 6px;
+    padding: 15px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  }
+  
+  .valoracion-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .valoracion-autor {
+    display: flex;
+    align-items: center;
+  }
+  
+  .autor-nombre {
+    font-weight: bold;
+    margin-right: 5px;
+  }
+  
+  .autor-rol {
+    color: #777;
+    font-size: 13px;
+  }
+  
+  .valoracion-estrellas .estrella {
+    font-size: 16px;
+  }
+  
+  .valoracion-evento {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 10px;
+  }
+  
+  .valoracion-comentario {
+    background-color: #fff;
+    border-left: 3px solid #ddd;
+    padding: 10px 15px;
+    margin: 10px 0;
+    font-style: italic;
+    color: #666;
+  }
+  
+  .valoracion-fecha {
+    font-size: 12px;
+    color: #888;
+    text-align: right;
+    margin-top: 5px;
+  }
+  
+  .loading-ratings, .error-ratings, .no-ratings {
+    padding: 20px;
+    text-align: center;
+    color: #666;
+  }
+  
+  .error-ratings {
+    color: #d32f2f;
+  }
+  
+  /* Estilos para el modal de valoración */
+  .modal-valoracion {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+  
+  .modal-content {
+    background-color: #fff;
+    width: 90%;
+    max-width: 500px;
+    border-radius: 8px;
+    padding: 25px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  }
+  
+  .modal-valoracion h3 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  .rating-stars {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+  .star-btn {
+    background: none;
+    border: none;
+    font-size: 30px;
+    color: #ddd;
+    cursor: pointer;
+    transition: color 0.2s;
+    padding: 0 5px;
+  }
+  
+  .star-btn.active {
+    color: #ffc107;
+  }
+  
+  .comentario-textarea {
+    width: 100%;
+    height: 100px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    font-family: inherit;
+    resize: vertical;
+  }
+  
+  .modal-buttons {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .btn-valorar {
+    background-color: #4CAF50;
+    color: white;
+  }
+  
+  .acciones-musico {
+    display: flex;
+    gap: 5px;
+  }

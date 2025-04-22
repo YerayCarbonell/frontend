@@ -230,6 +230,15 @@ const PostulacionesList = () => {
                             postulacion.musician.profile.experience || 'No especificada'
                           }
                         </p>
+                        {postulacion.musician.profile.tarifa && (
+                        <p className="postulacion-tarifa">
+                          <span className="label">Tarifa:</span> {
+                            postulacion.musician.profile.tarifa.monto 
+                            ? `${postulacion.musician.profile.tarifa.monto}€ ${postulacion.musician.profile.tarifa.descripcion || ''}`
+                            : 'No especificada'
+                          }
+                        </p>
+                      )}
                       </>
                     )}
                     
@@ -274,10 +283,19 @@ const PostulacionesList = () => {
                     )}
                     
                     {postulacion.estado === 'ACEPTADA' && (
+                    <>
                       <button className="btn btn-primary" onClick={() => navigate(`/mensajes/${postulacion.musician?._id}`)}>
                         Contactar
                       </button>
-                    )}
+                      {/* Añadir el botón de pago */}
+                      <Link 
+                        to={`/pagos/${id}/${postulacion._id}`} 
+                        className="btn btn-primary btn-pago"
+                      >
+                        <i className="fas fa-credit-card"></i> Pagar
+                      </Link>
+                    </>
+                  )}
                   </div>
                 </div>
               ))}

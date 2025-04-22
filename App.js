@@ -24,9 +24,11 @@ import ListaMensajes from './src/components/mensajes/ListaMensajes';
 
 import HistorialEventos from './src/components/historial/HistorialEventos';
 
+import PagoForm from './src/components/pagos/PagoForm';
 
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
+console.log("🌍 process.env:", process.env);
 
 function App() {
   return (
@@ -70,6 +72,9 @@ function App() {
             <Route path="/ofertas/:id/editar" element={<OfertaForm />} />
             <Route path="/ofertas/:id/postulaciones" element={<PostulacionesList />} />
             <Route path="/mis-ofertas" element={<MisOfertas />} />
+            <Route path="/pagos/:id/:postulacionId" element={<PagoForm />} />
+
+
           </Route>
 
           {/* Ruta 404 */}
